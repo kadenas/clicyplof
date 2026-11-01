@@ -38,6 +38,15 @@ vertical): los dos personajes cuentan como uno.
 - **3-4 años:** el problema central es visual y concreto, y se ve cómo se resuelve.
 - **5-6 años:** el beat 06 (predicción) les deja adelantarse en voz alta antes del final.
 
+**Firmas sonoras (aprobadas el 01/11/2026).** Cuando Clic tiene una idea, levanta el dedo
+índice y suena un **"clic"** seco, como dos piezas que encajan. Cuando Plof se cae o se aplasta,
+suena un **"plof"** blando. Van en todos los episodios desde el ep00: los nombres de los
+personajes son también sonidos que el niño reconoce y espera.
+
+**Episodio de presentación (ep00, aprobado el 01/11/2026): "¡Hola, Clic y Plof!"** Se publica
+antes del ep01. Presenta a los dos, Plof la lía dos veces con una pelota y una portería, y Clic
+tiene la idea (apuntar y empujar suave). Ficha en `docs/ep00_hola_clic_y_plof.md`.
+
 **Ningún color de objeto puede ser el azul de los muñecos.** Se confunde con sus cuerpos
 (pasó con la ficha azul del ep01).
 

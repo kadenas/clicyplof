@@ -5,7 +5,17 @@ Fecha: 01/11/2026
 
 ## Estado actual
 
-- **NUEVO (01/11/2026): personajes fijados con imagen.** Al ver el ep03 el usuario detectó que Clic y Plof no son los de la intro (el beat 01 se generó solo con texto y el modelo se los inventó). **El ep03 se queda así.** Desde el ep02, los personajes son los de la intro: referencia `assets/personajes_referencia.png` (rótulo de la intro sin letras, hecho con Qwen), ficha `docs/PERSONAJES.md`, bloque fijo `prompts/serie/BLOQUE_PERSONAJES.txt` y **regla 8**: el beat 01 nunca arranca de texto solo.
+- **SESIÓN DEL 01/11/2026, EN RESUMEN:**
+  - **Ep02 "El morado" MONTADO**: `output/ep02_el_morado.mp4` (61,4 s, 768×1344). Los 8 beats sin repetir ninguno en la segunda pasada, personajes de la intro y azul estable. **Pendiente de que el usuario lo vea y oiga.**
+  - **El usuario quiere hacer la TEMPORADA ENTERA.** Modo de trabajo: fichas por tandas de 4-5 que él revisa; yo acepto los clips buenos y **solo le enseño los dudosos**; él ve cada episodio montado.
+  - **Ep00 "¡Hola, Clic y Plof!" (presentación) — ficha APROBADA** (`docs/ep00_hola_clic_y_plof.md`). Se publica antes del ep01. Prompts sin escribir.
+  - **Firmas sonoras APROBADAS**: "clic" cuando Clic tiene una idea (levanta el dedo), "plof" cuando Plof se cae. En `TEMPORADA_0.md`.
+  - **Tanda 1 (ep04-07)**: fichas aprobadas, 32 prompts escritos (`prompts/epNN/guion.py` → `herramientas/montar_prompts.py`). Arranques del **ep04 y ep07 listos** en `assets/`; los del **ep05 y ep06 hay que repetirlos** (prompts ya corregidos).
+  - **Tanda 2 (ep08-11)**: fichas **aprobadas**; guiones (`guion.py`) y arranques **sin escribir**.
+  - **Proyecto en GitHub**: https://github.com/kadenas/clicyplof (rama `main`). Primer commit `a9a714d`.
+  - Nuevas referencias de pose del usuario: `assets/ref_plof_celebrando.png`, `assets/ref_clic_celebrando.png` (solo para mirar; fondo de cuadros pintado).
+
+- **Personajes fijados con imagen (01/11/2026).** Al ver el ep03 el usuario detectó que Clic y Plof no son los de la intro (el beat 01 se generó solo con texto y el modelo se los inventó). **El ep03 se queda así.** Desde el ep02, los personajes son los de la intro: referencia `assets/personajes_referencia.png` (rótulo de la intro sin letras, hecho con Qwen), ficha `docs/PERSONAJES.md`, bloque fijo `prompts/serie/BLOQUE_PERSONAJES.txt` y **regla 8**: el beat 01 nunca arranca de texto solo.
 
 - **Serie renombrada a "Clic y Plof"** (antes "Plof"). Personajes: **Clic** (A, alto y delgado; observa, compara y piensa; antes "Tato") y **Plof** (B, bajito y redondo; se lanza, empuja y se cae). Los dos son del mismo azul y se distinguen solo por la silueta. Idea de serie: **"del plof al clic"**.
 - **Público: 2-6 años.** Decidido el 16/09/2026 y ya unificado en todos los documentos, incluida la guía HTML.
@@ -21,7 +31,7 @@ Fecha: 01/11/2026
 - **Validado con un niño real (15/09/2026)**: un niño con TDAH lo vio entero sin despegar los ojos y quiso repetirlo. Es **una sola prueba**; faltan 2-3 niños más.
 - ComfyUI debe estar arrancado en `http://127.0.0.1:8188`.
 
-## Estructura fija de un episodio (decidida hoy)
+## Estructura fija de un episodio (decidida el 16/09/2026)
 
 | Pieza | Duración | Cómo se hace |
 |---|---|---|
@@ -38,6 +48,11 @@ Fecha: 01/11/2026
 - **`assets/personajes_referencia.png`** generada con Qwen desde `output/v_rotulo_cp2_00001_.png` (`prompts/serie/personajes_referencia.txt`, semilla 20260916, 30 s, buena a la primera; diferencia media con el original en la zona de los muñecos: 2,3/255). Aprobada por el usuario.
 - **`docs/PERSONAJES.md`** (ficha de personajes con medidas y color medido) y **`prompts/serie/BLOQUE_PERSONAJES.txt`**.
 - **Regla 8** en `docs/ep01_los_colores.md`; plantilla de ficha, `FICHA_TECNICA.md` (flujo, paso 5) y ficha del ep03 (nota de aceptación) actualizadas.
+- **Ep02 "El morado" completo**: ficha (Plof resuelve; ficha azul en **azul marino**; arranque desde la pose de la intro), arranque con Qwen (al tercer intento), 8 beats, rótulo "EL MORADO" con Qwen y clip, montaje de 61,4 s. Primera pasada descartada por resolución (ver "Problemas conocidos"). Registro completo en `docs/ep02_el_morado.md`.
+- **Regla de la escaleta cambiada**: el beat 01 arranca en la pose del final de la intro y se sueltan a jugar (antes "entraban" desde fuera del cuadro).
+- **Herramientas nuevas**: `herramientas/montar_prompts.py` (monta los prompts de un episodio desde `prompts/epNN/guion.py` + bloques fijos) y `fondo.corregir_azul` / `ultimo_fotograma.py --corregir-azul` (corta la deriva del azul).
+- **Fichas**: ep00 (presentación), tanda 1 (ep04-07) y tanda 2 (ep08-11), todas aprobadas. Prompts de la tanda 1 escritos.
+- **Git**: `.gitignore` (fuera `cortometraje/`, `output/` y mp4, salvo intro, careta, cierre y rótulo de la serie), primer commit y push a GitHub.
 
 ## Completado en la sesión anterior (16-17/09/2026)
 
@@ -58,24 +73,24 @@ Fecha: 01/11/2026
 
 ## Próximos pasos
 
-0. **Continuar el plan con el ep02 "El morado" aplicando el método nuevo de personajes** (`docs/PERSONAJES.md` § "Cómo se usa" y § "Pendiente de comprobar"): primer episodio con arranque desde la referencia. Vigilar que Qwen no retoque a los personajes al añadir el atrezo y resolver la postura inicial (la referencia los tiene abrazados).
-1. **Ver y oír `output/ep03_el_balon_de_arriba.mp4`** y decidir: (a) las cinco frases de voz (careta "¡Clic y Plof!", rótulo "El balón de arriba", beat 06 "¿Cómo puede llegar Clic al balón?", beat 07 "¡Arriba!", cierre "¡Adiós!"); (b) si el beat 08 se repite con otra semilla (Clic y Plof se ven como un bulto un tercio de segundo al soltar el balón; 13 min); (c) si el final del cierre convence (círculo a negro, 0,75 s de silencio).
-2. **PENDIENTE DE CONVERSACIÓN: la estrategia de venta.** El usuario la dejó abierta. Hay que decidir a qué llama vender antes de escribirla, porque el catálogo a producir cambia:
-   - *Hacer caja con el canal* (audiencia + publicidad). Ojo: en contenido infantil la publicidad personalizada está prohibida y eso hunde el RPM.
-   - *Colocar la serie* a una productora o plataforma (negocio de relaciones; que esté generada con IA es hoy un obstáculo real).
-   - *Vender a los padres* el método y los materiales (mejor margen; la guía ya lo apunta con la capa de canal para adultos).
-3. **Mejora propuesta, no implementada: limpiar el reflejo azulado del suelo en `herramientas/fondo.py`.** En todos los beats del ep03 el suelo quedaba con un tinte azul tenue donde pisa Plof; se limpió a mano en cada fotograma de arranque con la regla "píxel claro (R y G > 150) con B > R + 8 → blanco". Si se mete en `fondo.py`, se aplica sola en los enlaces y en el montaje. Cambio de 3 líneas; pedir aprobación.
-4. **Volver a montar el episodio 01** con careta corta, rótulo nuevo (hay que hacerlo: el actual dice "PLOF") y cierre. No cuesta GPU salvo el rótulo (Qwen, 30 s + clip de 3 s).
-5. **Episodio 02 "El morado"**: ficha con la plantilla (duraciones ya rellenas), reglas de `docs/ep01_los_colores.md` § "Aprendido al generar" y bloque de plastilina. Publicar el 02 detrás del 01 (el 01 termina prometiendo "¿y rojo con azul?"); el 03 puede ir después.
-6. **Terminar de instalar `faster-whisper`** (ver "Problemas conocidos"). Serviría para verificar las voces sin oírlas una a una.
-7. **Reservar `@clicyplof`** en YouTube y **comprobar "CLIC Y PLOF" en TMview** a mano (clases 41, 9, 16, 28).
-8. **Prueba de calidad sin el LoRA turbo** en un clip de 3 s (~20 min).
-9. **Mejoras de calidad ya diagnosticadas**: (a) guardar el fotograma de enlace como PNG sin comprimir desde el workflow; (b) recortar a 756×1344 (9:16 exacto) y reescalar a 1080×1920 en el montaje.
-10. **Poner el proyecto en git.** Lo irremplazable son ~200 KB de texto; `output/` y `.venv-voz/` al `.gitignore`.
-11. Decidir si se renombra `docs/TATO_PLOF_VANGUARDIA_EDUCATIVA_PLAN.html`, que conserva los nombres antiguos dentro y en el nombre del archivo (lo referencian otros cuatro documentos).
+1. **El usuario ve y oye `output/ep02_el_morado.mp4`** (voces: "El morado", "¿Qué pasará si las juntamos?", "¡Morado!") y lo aprueba o pide cambios.
+2. **Añadir las firmas sonoras a los prompts ya escritos de la tanda 1** (ep04-07): "a crisp click sound" cuando Clic levanta el dedo con la idea y "plof" en las caídas de Plof. Retocar `prompts/epNN/guion.py` y volver a ejecutar `herramientas/montar_prompts.py epNN`.
+3. **Ep00 "¡Hola, Clic y Plof!"**: escribir `prompts/ep00/guion.py` y `arranque_beat01.txt` (pelota roja + portería de dos postes amarillos), rótulo con Qwen (ojo con los signos de exclamación y la coma: vía A con recuento de letras) y producir. Es el primero que se publica.
+4. **Repetir con Qwen los arranques del ep05 y ep06** (prompts ya corregidos en `prompts/ep05|ep06/arranque_beat01.txt`). Pasar `limpiar_fondo` a todo arranque de Qwen: raya la pared casi siempre.
+5. **Producir la tanda 1** (ep04-07): para cada uno, beat 01 desde `assets/epNN_arranque_beat01.png` y cadena 02-08 con `bash herramientas/cadena_beats.sh epNN 01 02:deseo:124 03:intento:192 04:fallo:192 05:mejora:124 06:prediccion:124 07:solucion:192 08:eco:124` (ya lleva `--tamano 768x1344`, `--limpiar-fondo --corregir-azul` y coge el clip más reciente). Revisar cada clip con `herramientas/revisar_clip.py`. Rótulo + clip de rótulo. Montaje igual que el ep02.
+6. **Tanda 2** (ep08-11): escribir los `guion.py` y los arranques, y producir. Escribir y presentar las fichas de la **tanda 3** (ep12-15).
+7. **Volver a montar el episodio 01** con careta corta, rótulo nuevo (el actual dice "PLOF") y cierre.
+8. **Commit y push** de lo producido en la próxima sesión (siempre con aprobación).
+9. Pendientes que siguen abiertos: **estrategia de venta** (sin decidir qué es "vender": canal, productora o padres); reservar `@clicyplof` y comprobar TMview; `faster-whisper`; prueba sin LoRA turbo; reescalar a 1080×1920 en el montaje; ver y oír el ep03; decidir si se renombra `docs/TATO_PLOF_VANGUARDIA_EDUCATIVA_PLAN.html`.
 
 ## Decisiones tomadas
 
+- **(01/11/2026) Hacer la temporada entera**, por tandas de 4-5 fichas; el usuario solo ve los clips dudosos y los episodios montados.
+- **(01/11/2026) Ep00 de presentación** con la historia de la portería, y **firmas sonoras "clic" / "plof"** en toda la serie.
+- **(01/11/2026) Ep02**: ficha azul en **azul marino** (no se confunde con los muñecos); resuelve Plof.
+- **(01/11/2026) El beat 01 arranca en la pose final de la intro** (no "entran" desde fuera).
+- **(01/11/2026) Ep07**: la bola que falta rueda a la esquina y se queda **a la vista** (no sale del cuadro). **Ep11**: la pieza distinta está mezclada entre piezas del mismo color, no tapada.
+- **(01/11/2026) GitHub** `kadenas/clicyplof`: `cortometraje/` fuera (es otro proyecto).
 - **(01/11/2026) Los personajes canónicos son los de la intro**, fijados con la imagen `assets/personajes_referencia.png`; si texto e imagen no coinciden, manda la imagen. El ep03 se acepta con los personajes desviados. Ningún beat 01 vuelve a arrancar de texto solo (regla 8).
 
 - **Nombre "Clic y Plof"**, con los dos personajes en el título. *Clic* es el momento de entender y el sonido de dos piezas encajando; *Plof* es el error blando y la caída.
@@ -106,16 +121,23 @@ Fecha: 01/11/2026
 - **Calidad de imagen.** Por orden de coste: (1) se publica a 768×1344 cuando Shorts trabaja a 1080×1920, y además 768×1344 **no es 9:16 exacto** (0,571 frente a 0,5625); (2) pérdida por generación en cadena, porque el fotograma de enlace sale de un mp4 comprimido — se confirma al ver que la intro, que arranca de un PNG limpio, se ve mejor que los beats encadenados; (3) el LoRA turbo de 8 pasos; (4) `FUERZA = 0.85` en `fondo.py` puede aplanar la textura.
 - **Qwen reparte mal los colores** con cuatro letras seguidas: pinta dos contiguas del mismo color pase lo que pase (dos intentos, dos colores distintos, mismo fallo). En el rótulo bueno la P y la L son las dos rojas. La vía no es el prompt sino tirar semillas y elegir.
 - **La intro buena todavía encoge los pegotes** entre el segundo 3,6 y el 4,3 antes de convertirlos en letras. Defecto menor, aceptado.
-- Tiempos a 768×1344: 5 s ≈ 13 min, 8 s ≈ 21-25 min. Un episodio ≈ 3 h de GPU.
+- Tiempos a 768×1344 (medidos el 01/11 en el ep02): 5 s ≈ 12 min, 8 s ≈ 23-24 min, rótulo de 3 s ≈ 6 min. Un episodio ≈ 2 h 15 min de GPU.
 - La voz de MiniMax llega 1-2 s tarde respecto al momento pedido: se compensa pidiéndola antes.
-- El azul de los muñecos se oscurece al encadenar clips; no corregido.
 - Los clips que arrancan de imagen compuesta saltan en los 8 primeros fotogramas: `@saltar=8`.
-- El proyecto no está en git.
+- **Qwen raya la pared** al añadir objetos (ep02 v1, ep04, ep06, ep07): pedir "pared lisa" no basta; pasar `limpiar_fondo` al resultado (dos pasadas) lo deja limpio.
+- **Qwen coloca mal el atrezo grande** (ep05: arco gigante con los personajes dentro; ep06: alfombra bajo sus pies y raya mal orientada): decir explícitamente dónde va cada cosa respecto a los personajes.
+- **ComfyUI numera las salidas `_00001_`, `_00002_`…** aunque se renombren los archivos en `output/`: al repetir un clip, coger el más reciente, no el `_00001_`.
 
 ## Archivos modificados en esta sesión (01/11/2026)
 
-- **Nuevos:** `assets/personajes_referencia.png`, `output/personajes_referencia_00001_.png`, `docs/PERSONAJES.md`, `prompts/serie/BLOQUE_PERSONAJES.txt`, `prompts/serie/personajes_referencia.txt`
-- **Modificados:** `docs/ep01_los_colores.md` (regla 8), `docs/PLANTILLA_FICHA_EPISODIO.md`, `docs/ep03_el_balon_de_arriba.md` (nota), `FICHA_TECNICA.md` (paso 5 del flujo), `HANDOFF.md`
+- **Nuevos (docs):** `docs/PERSONAJES.md`, `docs/ep00_hola_clic_y_plof.md`, `docs/ep02_el_morado.md`, `docs/ep04` a `docs/ep11` (fichas)
+- **Nuevos (prompts):** `prompts/serie/BLOQUE_PERSONAJES.txt`, `prompts/serie/personajes_referencia.txt`, `prompts/ep02/` (8 beats, arranque, rótulo, clip de rótulo), `prompts/ep04` a `ep07` (`guion.py`, 8 beats, arranque)
+- **Herramientas:** nuevas `herramientas/montar_prompts.py`, `herramientas/cadena_beats.sh` y `herramientas/revisar_clip.py`; `fondo.py` (+`corregir_azul`), `ultimo_fotograma.py` (+`--corregir-azul`)
+- **Nuevos (assets):** `personajes_referencia.png`, `ref_plof_celebrando.png`, `ref_clic_celebrando.png`, `ep02_arranque_beat01..08.png`, `ep02_rotulo.png`, `ep04_arranque_beat01.png`, `ep07_arranque_beat01.png`
+- **Nuevos (output, no van a git):** `ep02_el_morado.mp4` (montado), `ep02_beatNN_00002_.mp4` (buenos), `ep02_beatNN_480p.mp4` (primera pasada descartada), `ep02_rotulo_clip_00001_.mp4`, arranques de Qwen
+- **Nuevos (raíz):** `.gitignore`; carpeta `.git/`
+- **Modificados:** `docs/ep01_los_colores.md` (regla 8), `docs/PLANTILLA_FICHA_EPISODIO.md`, `docs/ep03_el_balon_de_arriba.md` (nota), `docs/TEMPORADA_0.md` (arranque, firmas sonoras, ep00), `FICHA_TECNICA.md` (flujo), `HANDOFF.md`
+- **Sin tocar, en la raíz:** las dos imágenes originales "Mascota azul celebrando saltando*.png" (copiadas a `assets/`; borrarlas solo si el usuario lo pide)
 
 ## Archivos modificados en la sesión anterior (16-17/09/2026)
 

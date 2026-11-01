@@ -7,6 +7,13 @@
 
 Los personajes buenos son los de la **intro y el cierre** (`output/v_intro_cp2_00001_.mp4`, `output/v_cierre_final.mp4`). La referencia es el rótulo de la intro (`output/v_rotulo_cp2_00001_.png`) con las letras quitadas por Qwen Image Edit (`prompts/serie/personajes_referencia.txt`, semilla 20260916, 30 s). Comprobado: en la zona de los muñecos la imagen se diferencia del rótulo en 2,3 sobre 255 de media; son los mismos.
 
+## Referencias de pose (añadidas el 01/11/2026 por el usuario)
+
+- `assets/ref_plof_celebrando.png` — **Plof** saltando de alegría: dos bolas (cabeza y barriga), brazos cortos, piernas cortas y gruesas con pies de deditos.
+- `assets/ref_clic_celebrando.png` — **Clic** saltando de alegría: cabeza grande, tronco de salchicha, brazos y piernas largos.
+
+Confirman la forma de los personajes de la intro y añaden dos detalles: **al celebrar, abren mucho la boca y se ve una lengua rosa**, y **las manos tienen cinco dedos redondeados**. Son renders "de juguete" con un fondo de cuadros pintado (no es transparencia real): sirven para mirar, no como entrada directa de Qwen (habría que quitar el fondo antes). La imagen de producción sigue siendo `assets/personajes_referencia.png`.
+
 ## Por qué existe este documento
 
 Al ver el ep03 (17/09/2026) se vio que los personajes no eran los de la intro: cabezas pequeñas, Clic como un palo de alambre, Plof como un bulto, azul más oscuro y bocas abiertas grandes. Causa: el beat 01 se generó **solo con texto** (`tropiezo_t2v.json`) y el modelo se inventó a los personajes a partir de la descripción; los beats siguientes heredaron esa versión y el azul se oscureció un poco más en cada enlace. La intro y el cierre, en cambio, arrancan de una imagen, y el modelo copia lo que ve.
