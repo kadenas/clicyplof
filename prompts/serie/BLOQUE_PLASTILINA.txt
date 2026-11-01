@@ -1,0 +1,18 @@
+### BLOQUE FIJO DE PLASTILINA — copiar en TODOS los prompts de la serie "Clic y Plof"
+### Va justo después de la descripción de la escena y antes del "Timeline:".
+### Las dos últimas frases son obligatorias: sin ellas el modelo deforma tanto la
+### plastilina que pierde o duplica objetos (fue el fallo del beat 05 del ep01).
+
+Everything in the frame is made of real modelling clay (plasticine), and everything behaves like real clay: matte surface, visible fingerprints and thumb marks, soft rounded edges, slightly uneven hand-made shapes. Nothing is rigid, shiny or plastic.
+
+The clay is soft and springy, and it deforms on every contact:
+- When a character lands, jumps or falls, its body squashes flat on impact and then springs back up, wobbling like a jelly before settling.
+- When a character walks or runs, its body stretches upward on the way up and squashes down on each step.
+- When something heavy drops on the floor, it flattens on the bottom, spreads slightly, and then rounds back.
+- When a character grabs, presses or leans on something, the clay dents under its hands and keeps the finger marks for a moment before slowly rounding out again.
+- When two pieces bump into each other, both wobble.
+- Faces are clay too: cheeks squash, mouths stretch wide, heads wobble when the character shakes them.
+
+Every deformation is ELASTIC: the clay squashes, stretches and wobbles, and then always returns to exactly the same shape, the same size and the same colour it had before. The clay never melts, never drips, never tears, never breaks into pieces, never leaves bits behind, and never loses or gains volume: one piece of clay stays one single piece of clay of the same size from the first frame to the last.
+
+Motion is smooth 24fps with real weight, not choppy and not floaty: things feel soft and heavy at the same time.

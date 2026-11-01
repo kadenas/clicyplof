@@ -1,0 +1,25 @@
+# --- Proyecto aparte: el cortometraje "La bayeta" (2 GB, tiene su propia documentación) ---
+cortometraje/
+
+# --- Salidas generadas (vídeos e imágenes de ComfyUI, ~100 MB): se pueden regenerar ---
+# "output/*" (y no "output/") para poder rescatar abajo las piezas fijas de la serie
+output/*
+
+# --- Entornos y cachés de Python ---
+.venv-voz/
+__pycache__/
+*.pyc
+
+# --- Configuración local de Claude Code (permisos de esta máquina) ---
+.claude/
+
+# --- Por si acaso: vídeos sueltos y secretos ---
+*.mp4
+.env
+
+# --- EXCEPCIONES: piezas aprobadas de la serie que NO se pueden regenerar iguales ---
+# (van después de "*.mp4" porque en .gitignore manda la última regla que coincide)
+!output/v_intro_cp2_00001_.mp4
+!output/v_careta_corta.mp4
+!output/v_cierre_final.mp4
+!output/v_rotulo_cp2_00001_.png

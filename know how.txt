@@ -1,0 +1,441 @@
+
+Receta
+Cómo se hace hoy un clip
+Máquina	RTX 5080 de 16 GB y 64 GB de RAM. ComfyUI 0.42 en el puerto 8000, sin su compilador.
+Modelo	Híbrido fl2va × ref2va (bloques 25 a 49), int8, 20 GB. Codificador Qwen3-VL 32B y VAE de vídeo fp16.
+Canción	Antes de escribir un plano: el pulso y los golpes por bandas, y la letra con el segundo de cada palabra.
+Formato	768×1344, 124 fotogramas (5,17 s) a 24 fps.
+Planos	Tres o cuatro por clip, cada uno con su hora. Si van anclados, hasta uno por pulso: seis en 5 s.
+Producción	Turbo de 8 pasos. De 47 a 60 s por paso: de 7 a 9 minutos por clip.
+Rápido	Turbo de 4 pasos (fl2v v1.0 a 768p, a fuerza 1): de 236 a 246 s por clip con anclas y guía de audio. Lo usó «La fotografía de mañana»; A ESGAYA ya había salido con un turbo de 4 pasos a 768.
+A tope	Sin turbo y a 20 pasos. De 15 a 19 minutos por clip.
+Referencias	Cara, cuerpo y sitio: hasta tres de 1 MP. Con más, se reparten 2,8 MP entre todas. En clips de varios planos, dos fichas a 640×1120.
+Guía	La canción en el fotograma 0 para playback o para enganchar el gesto. Una imagen en un fotograma para que el plano arranque en ella, sin pasarla además como referencia. Varias imágenes son varios planos.
+Control	ControlNet 2.0 int8, con bordes, profundidad o un boceto.
+Tanda	Lanzador con vigilante. Si la tarjeta pasa dos minutos por debajo de 140 W, corta la toma, limpia y la reintenta una vez.
+Remate	Guardar el latente y decodificarlo con el VAE 2X: 1536×2688 en 33 s.
+Montaje	Se miden los cortes reales de cada clip y cada plano se coloca en su golpe, un fotograma antes. Unión en crudo a 24 fps, mosca en diferencia y la canción copiada tal cual. Para el móvil, MP4 con AAC.
+
+node scripts/comfy-h3.mjs suelto --prompt-file b01.txt --seg 5 --w 768 --h 1344 \
+  --seed 602001 --ref cara.png --ref sitio.png --guia guia-01.wav@0 --nombre PIEZA-b01
+
+# seis planos, cada uno anclado en su dibujo y en su pulso, más el tramo de canción
+node scripts/comfy-h3.mjs suelto --prompt-file c1.txt --seg 5 --w 768 --h 1344 --seed 780001 \
+  --guia c1-1.png@0 --guia c1-2.png@0.791667 --guia c1-3.png@1.541667 \
+  --guia c1-4.png@2.333333 --guia c1-5.png@3.125 --guia c1-6.png@3.875 \
+  --guia guia-c1.wav@0 --nombre PEL-c1
+
+Cómo se hace hoy una imagen con FLUX.3
+Modelo	FLUX.3 klein BASE int8 (5,8 GB), codificador Qwen3-VL-4B fp8 y VAE flux2. Se lanza con flux3x.mjs o con tres workflows de ComfyUI.
+Ajustes	euler / simple y guía 3,5. Con referencia, 24 pasos (de 36 a 62 s por imagen a 768×1344 y 1024×1280). Sin referencia o para lo final, 50: con referencia la semilla fija la composición, pero sin ella los detalles cambian entre 24 y 50.
+Tamaños	Múltiplos de 32: 864×1536 (9:16), 768×1344, 1792×1120 (16:10), y 1152×2048 o 1440×2560 para las hojas con muchas cajas.
+Logo	El PNG de la mosca sobre fondo liso como referencia (blanca sobre negro; la de tinta negra, sobre crema), a 0,4 MP, y el emblema descrito con palabras en el prompt.
+Maquetar	Cajas de composición: una por elemento, con su descripción y el texto entre comillas; la primera es el fondo; el sujeto se define una vez en el prompt. Dibujarlas en ComfyUI pide Nodes 2.0.
+Material	Pedir el soporte y la neblina: pigmento en polvo, cartulina, spray, «hand-airbrushed on illustration board». Nunca «arte digital».
+Repaso	img2img a denoise 0,30 y 1,5× (1728×3072 en 241 s): conserva composición y celdas y añade bordes limpios y grano. A 0,45 ya cambia contenido.
+Elegir	Hoja numerada de candidatos, sin animar: Antonio marca sí y no, y solo entonces se anima.
+
+node flux3x.mjs t2i --prompt-file p.txt --w 1792 --h 1120 --seed 981002 --steps 50 --cfg 3.5 \
+  --sampler euler --scheduler simple --nombre CHORDSLOP --out salida
+
+# el logo por referencia y una maqueta por cajas, a 24 pasos
+node flux3x.mjs edit --prompt-file p.txt --ref logo.png --megapixeles 0.4 --w 864 --h 1536 \
+  --layout cajas.json --steps 24 --nombre BLACKARK --out salida
+
+Cómo se hace hoy un videoclip con motor propio
+Medir	Pulso y ataques por bandas con librosa; letra y segundo de cada palabra con Whisper por ventanas de 30 s; cada palabra se ancla al ataque más cercano, de −0,22 a +0,10 s.
+Guion	Una escena por frase de la letra, con su paleta y su variante; los cortes caen en los ataques. Un Guion por canción.
+Motor	Python con NumPy, OpenCV y PIL. De cartulina: instancias del logo con pistas de movimiento, letras, lámpara, mosca en diferencia y fundido. Suizo: una función pura del tiempo, con espectros, onda y medidores leídos del audio, y aerógrafo procedural.
+Render	Cartulina: de 1 a 3 s por exposición a 1536×2688, reducida a 768×1344. Suizo: de 0,12 a 0,3 s por fotograma. Cuatro procesos en paralelo por tramos: de 4 a 25 minutos la canción entera.
+Cadencia	«A doses» (12 fps) para el stop motion, con la rejilla anclada al primer fotograma de cada escena.
+Montaje	PNG a H.264 con matriz bt709 etiquetada; el MP3 copiado tal cual y su hash comparado con el del original; móvil a 576×1008 con AAC.
+Cómo se hace hoy una pieza con una cara que habla (el audio primero)
+Voz	Un prompt de Suno con las frases (spoken word, a capela, sin música y cada frase de menos de 4 s). La pista no se toca.
+Medir	Whisper local da el segundo de cada palabra; el silencio se mide a −46 dB para sacar el principio y el final limpios de cada frase.
+Cortar	Una frase por fichero con 80 ms de margen, y por cada clip con cara una guía de 5,0 s: la frase más silencio digital.
+Guion	Una tabla de tramos con su hora y su origen (cara con guía, voz en off o pantalla); cada corte, 80 ms antes de su frase.
+Stills	FLUX.3 en edición con la cara ampliada ×4 y el escenario como referencias, 864×1536, 24 pasos, unos 90 s por toma. El sitio se repite en cada prompt. Hoja numerada para elegir.
+Clips	H3 con el turbo de 4 pasos a 768×1344: el still como ancla en su fotograma, la guía de audio en el 0, uno o dos planos por clip; unos 4 minutos cada uno. Lo que tiene que leerse (una figura) ocupa al menos un tercio del alto.
+Pantallas	Un script de PIL por pantalla, a 24 fps, con los tiempos de las palabras; aros y rótulos calculados con la función del recorte.
+Sonido	Capas aparte debajo de la pista intacta: ambiente, efectos de sala y un corte seco a negro.
+Montaje	Tabla de fotogramas (696 para 29 s): cada tramo se recorta por número y vídeo y audio salen con la misma duración. Se revisa con una hoja de un fotograma por segundo y con los pares antes y después de cada corte.
+
+python inserts.py                                          # las cuatro pantallas
+python audio.py                                            # pista intacta + capas: mezcla-v1.wav
+python montar.py FOTOGRAFIA-DE-MANANA-v2 G6=clips/G6b.mp4  # 696 fotogramas y la mezcla
+
+Aprendizaje
+Lo aprendido, por temas
+Escribir para H3
+
+    Seis bloques: subject_definitions, summary, retention_analysis, detailed_description, overall_soundscape y non_diegetic_music.
+    Los tiempos se respetan si llevan hora. Con [Shot 2] At 00:01.250, tres cortes pedidos en 1,250, 2,500 y 3,750 cayeron en 1,250, 2,458 y 3,750. Con cinco cortes se adelantan y el error se acumula hasta 292 ms.
+    Varios planos en un clip. H3 hace el número pedido y en su orden, con el personaje igual en todos. A 768 y con referencias, de 54 cortes pedidos cayeron 15 en su fotograma y 44 a dos o menos; el peor, seis antes. Tres de 21 clips abrieron con cuatro o cinco fotogramas de una imagen que nadie pidió.
+    La retención es un parámetro. Marcar deliberately_not_preserved lo que la foto trae y no quieres (la pared del retrato, el prado, el tendido) funcionó en PIEDRERO y en A ESGAYA. No es un marcador oficial: los de MiniMax son cuatro y ese no está.
+    MiniMax publica dos guías de prompt, y escribíamos siete cosas distinto. Las que más pesan: el primer plano va sin hora, el resumen abre con el tipo de tarea, la cámara lleva amplitud y velocidad, la descripción pide de 350 a 500 palabras y el audio se declara con su etiqueta. Sin medir todavía si cambia el resultado.
+    Acción, no negación. «No se gira» falló dos veces. «Se queda inclinado sobre el contenedor hasta el último fotograma» funcionó.
+    Suceso o proceso. De ocho estilos de animación, solo llenó los cinco segundos el que pedía algo «hasta que». Los pasos no influyen: a 8 y a 20 salió igual de quieto.
+    La luz se pide con su fuente a la vista. No «contraluz»: la puerta abierta detrás.
+    Un movimiento de cámara por plano, y cada plano acaba en un estado.
+    Texto en cuadro. Los rótulos grandes y cortos salen. El texto pequeño sale galimatías y no se quita pidiéndolo: se quita no dejándole sitio.
+    Encuadres que fallan. «Por encima del hombro, desde detrás» duplica a la persona. El cenital y los planos generales de contenido horizontal giran el cuadro 90°. Pedir cosas volando sobre un dibujo plano lo llena de confeti.
+    El inventario cerrado sujeta al modelo a 480. A 768 no bajó los intrusos: 13 contra 15 en tres pares a ciegas.
+
+Identidad y referencias
+
+    Sin referencia, cada plano trae otra persona. Con un fotograma del primer plano como referencia, la identidad aguanta cambios de luz, encuadre y distancia.
+    Una referencia sostiene una cosa: quién, dónde o con qué. Se elige por plano.
+    Referencia por escena. Se saca un fotograma del plano ancla y se usa en los demás planos de esa escena.
+    El prompt no le gana a la foto. Joyas, ropa y fondo de la referencia se cuelan. Las fichas con fondo de estudio asoman al arrancar: 5 de 8 tramos, contra 0 de 7 con fondos reales.
+    En planos cerrados, solo cara y cuerpo. Con la foto entera de la escena, el clip arranca en el encuadre de la foto.
+    Con foto de sitio, lo pequeño sale diminuto. Hay que pedir el plano cerrado y que el objeto llene el cuadro.
+    Para un inserto de manos, no definir personajes. Si se describe a una persona, H3 la pone de frente.
+    Presupuesto. Tres referencias de 1 MP: de 276 a 331 s. Cuatro: 623 s. Cuatro a 0,70 MP: unos 270 s.
+    Sin foto, el color de piel no viaja. Al redibujar al DJ solo con bordes salió con la piel clara. Hay que escribirlo.
+    Una foto se redibuja en el estilo de un LoRA y conserva los rasgos. Un fotograma de esa ficha dibujada sostiene después al personaje entero: pelo, ropa y complementos.
+    Lo que la ficha lleva en la mano vuelve a salir. El personaje reaparecía con la gorra que acababa de perder. Hizo falta una ficha sin ella.
+    Un carnet de 251 px alcanza. Ampliado ×4 con RealESRGAN_x4plus y puesto como referencia junto al escenario, FLUX.3 mantuvo la cara, el pelo con mechas, el aro y la blusa en 22 planos, también de espaldas y de perfil.
+    Foto entera más recorte de la cara. La foto de una anciana como única referencia dio otra anciana (la rebeca y el pelo se parecen, la cara no: 72 s). Con la foto entera y el recorte de la cara ampliado ×2, la misma persona con su vestuario y su sitio (88 s). Pedida en el mismo plano que el recorte, copia casi literal su expresión y su fondo.
+    En una escena nocturna, el plano de día es la referencia, no la foto en bruto del escenario: así sale la misma puerta. Y la persona que aparece en la foto del escenario se cuela en el fondo: se limpia antes la referencia.
+
+Tiempo, música y guía
+
+    Primero se mide la canción: el pulso, los golpes por bandas y la frase que se repite. El tempo sale con candidatos, y la mitad y el doble puntúan parecido (60 y 120, 77,5 y 155). Se decide doblando la canción sobre su frase.
+    La letra, con el segundo de cada palabra, la saca Whisper en local. Acierta los tiempos y no siempre la letra. En nueve segundos de entrada instrumental se inventó una frase entera.
+    La guía de audio mueve la boca. Su sonido no sale en el mp4: la canción original va encima en el montaje y ya casa.
+    Tiene que haber una boca en cuadro. El cupo de planos cantando se da con números de plano, no con «la mayoría». Vale una boca que no sea humana: con el recorte de una losa con un hueco dentado clavado y la voz de guía, el hueco se abre y se cierra con las sílabas.
+    Las ranuras de referencia de audio no colocan nada en el tiempo. Con percusión por ahí, los cortes cayeron peor que al azar. Se midió sin declarar el audio en el prompt, como piden las guías oficiales: hay que repetirlo.
+    Sin voz, la guía engancha el gesto. El DJ cabecea cada 0,71 s con guía, con el pulso en 0,615. En Vortex, el estallido empieza 65 ms después del drop. En LA GORRA los puños suben y bajan cada 0,50 s, que es el pulso; el paseo no se engancha.
+    El sesgo de los cortes depende del muestreador. Con TaoMate llegaban 160 ms tarde; pedirlos 80 ms antes los centró. El turbo de 4 pasos a 768 no pide compensación, y el de 8 tampoco: en 54 cortes el desvío medio fue cero.
+    El golpe se mide por bandas. El drop de la canción de Níquel está en 14,600 s, y la rejilla de compases se ancla al drop, no al segundo cero.
+    Cortes con motivo musical, no uno por golpe porque sí. En PELUCAS la entrada lleva planos largos, el drop cambia de personaje en cada pulso y los acentos de entre medias son saltos de zoom dentro del mismo plano.
+    El tempo puede no tener rejilla. En «streptococo» los candidatos (134,75, 137 y 67,25 BPM) puntuaron solo ×1,13 sobre el azar, y los graves caen cada 0,41 s de mediana. Se cortó a los ataques medidos, no a una rejilla.
+    Whisper marca las palabras de 30 a 100 ms antes del ataque real. Cada palabra se ancla al ataque de librosa más cercano, entre −0,22 y +0,10 s.
+    El audio que H3 genera solo con texto sale en AAC a 32 kHz estéreo, a −12 o −13 LUFS, con la forma que dicta el guion: colchón suave, actividad desde el tercer plano, ráfaga en el planeta y un golpe final con cola.
+    Primero la voz, luego las imágenes. Con el audio de Suno hecho, medido por palabras y cortado por frases, los cortes del montaje caen 80 ms antes de cada frase y las pantallas se pegan a las palabras: «tres» a 10,34 s hace salir el sello 03:17 y «ahí» a 15,20 s cierra la elipse.
+    La guía de una frase corta va con silencio hasta los 5,0 s. En el fotograma 0 del clip entra la frase recortada del audio original y el resto es silencio digital, así la boca solo se mueve donde hay voz en cuadro. En G1, G3, G4 y G5 la boca siguió la voz a ojo; su audio no sale y el de Suno va encima.
+    La guía de audio y el ancla de imagen caben en el mismo fotograma 0. El plano arranca en el still y la boca habla con la guía; en G4 una segunda ancla a 1,54 s corta al primer plano en el fotograma 37.
+    La sincronía labial no se mide por correlación. Se repitió el 20/10 (movimiento de la zona de la boca contra la envolvente de la guía): en G3 y G5 sale plana entre −5 y 0 fotogramas y en G4 la domina el salto del corte. La boca va dos o tres fotogramas por delante de la voz, lo normal en habla real, y eso es todo lo que dice; se mira a ojo.
+
+Pasos, turbos y calidad
+
+    A 8 pasos sin el LoRA turbo aguanta lo quieto y se rompe lo que se mueve. Con el turbo de 8 pasos, una voltereta hacia atrás salió en 3 de 3 semillas, una de ellas con un par de fotogramas feos. Los pasos se deciden por plano.
+    El turbo de fl2v sí aplica sobre ref2va: casan 208 de 208 módulos. Durante semanas el código decía lo contrario.
+    A 20 pasos sin turbo las monedas tienen relieve, la piel pierde el brillo de plástico y el detalle fino baila menos entre fotogramas.
+    Un LoRA que no casa no falla: no hace nada. Antes de fiarse, comparar cabeceras y buscar lora key not loaded en el registro.
+    Calidad antes que velocidad. Ningún atajo que se note. La velocidad sirve para tener más semillas donde elegir.
+
+Recortes a tamaño real del ojo y de las monedas de la mujer de PRATA: a la izquierda a 8 pasos con turbo, a la derecha a 20 pasos sin turbo, con más relieve y textura
+El mismo plano con el VAE 2X: 8 pasos con turbo y 20 pasos sin turbo
+Resolución, memoria y máquina
+
+    La misma semilla a otra resolución es otra toma. La resolución se elige antes de buscar la toma.
+    El límite es píxeles por fotogramas. 768×1344 durante 5 s cabe. Durante 8 s ya no.
+    Los vatios dicen cómo va: de 250 a 290 W calcula; hacia 170 W parte del modelo va por el bus; hacia 65 W, casi todo.
+    Al cambiar de modelo, vaciar la memoria antes de volver a H3.
+    La ventana de ComfyUI se va comiendo la tarjeta. Su proceso gráfico pasó de 1,6 a 3,3 GB en una tarde y H3 cayó a 60 W. Se arregla reiniciando solo ese proceso: la ventana parpadea y el servidor sigue.
+    Otro programa con la tarjeta cogida hace lo mismo. Con Blender y Houdini abiertos, una toma de 8 minutos tardó 27.
+    Una toma que agota la espera sigue viva dentro de ComfyUI, y la siguiente se pone en cola detrás. Hay que vaciar la cola e interrumpir.
+    Un modelo más pequeño en disco no compra memoria. El w4a8 y el w6a8 ocupan lo mismo en la tarjeta que el int8 y tardan un 41 % y un 22 % más.
+    El PC se reinicia solo: 218 veces entre abril y septiembre, otra el 9 de octubre en mitad de una tanda y otra el 10 en el arranque del modelo de una toma a 768 (esta vez Windows guardó el volcado, de 3,5 GB). Un «se colgó» se cruza primero con el registro de Windows.
+
+Anclas, ControlNet y logos
+
+    Anclar una imagen. No pasarla también como referencia, encajarla al formato y no describir con palabras lo que la imagen ya enseña. Si va en el fotograma 0 para encadenar, el plano tiene que arrancar donde está el ancla.
+    Un ancla de una imagen dura un fotograma: el plano arranca en ella y se sigue moviendo. Para que la imagen se quede quieta hace falta un lote repetido.
+    Un ancla a mitad de clip es un corte en su fotograma, sin fundido ni congelado. Varias anclas son varios planos, cada uno animado desde su imagen.
+    Cuándo se cumple. Con la figura entera y algo de su entorno: 14 de 14 cortes en su fotograma en ESPERA y 22 de 25 en PELUCAS, con los otros tres a uno o dos. Aguantan hasta seis anclas por clip, una por pulso.
+    Cuándo se suelta. Un recorte que parte la figura por la mitad dura dos fotogramas, y H3 reencuadra a su gusto. Uno casi abstracto dura uno y sale otra cosa. En dos clips hechos solo de detalles muy cerrados, cuatro de ocho cortes se adelantaron cuatro o cinco fotogramas.
+    También con dibujos abstractos y pintados. En «streptococo», cuatro de cuatro cortes en su fotograma exacto con aerógrafo (43, 86, 36 y 100) y tres de tres con pigmento y cartulina (60, 120 y 178). En IALAB01 la misma imagen ancla el primer y el último plano: cuadrado, cuatro de cuatro; vertical, dos de cuatro (el planeta, 70 por 72, y el ancho de cierre, 91 por 96).
+    Así se anima una lámina desde su dibujo. Cada plano es un recorte clavado. El texto nombra la figura, dice «exactly as drawn» y cuenta solo lo que se mueve. El punteado a tinta aguanta los cinco segundos.
+    H3 agrisa el papel blanco. En 3 de 10 clips de PELUCAS el fondo bajó de 253 a 225 desde el segundo fotograma, con viñeta. El montaje lo corrige midiendo el papel en las cuatro esquinas de cada fotograma.
+    Animar un cartel: H3 anima el fondo sin texto y el texto original va encima.
+    ControlNet 2.0. Los bordes calcan composición y gesto. La profundidad respeta la postura y deja dibujar. El logo como boceto sale tallado exacto. El int8 da la misma toma que el bf16.
+    En imagen fija, el mapa de profundidad tiene que ser de verdad. Un logo plano usado como profundidad fabrica una chapa.
+    Los preprocesadores pesados van en un trabajo aparte, no en el grafo de H3.
+    Un retrato con su decorado como ancla corta en su fotograma. De tres cortes con anclas medidos por el salto de imagen (G4, G6 y su repetición G6b), uno cayó en su fotograma (37 por 36,96) y dos un fotograma antes (14 por 14,88).
+
+Dos filas de seis viñetas sobre papel blanco. Arriba, seis dibujos tal cual: una trompeta amarilla con patas, un perrito caliente con dos cepillos de dientes, un muelle amarillo con zapatos rojos, un huevo rojo sobre un huevo frito, una nube rosa con un tipo amarillo dormido encima y un monstruo gris de sonrisa morada. Abajo, los mismos medio segundo después: la trompeta se gira y suelta rayas de colores, el huevo llora a chorros, la nube llora y el monstruo lanza su galleta al aire
+Las seis anclas del primer clip de PELUCAS, una por pulso. Abajo, cada plano medio segundo después
+Arriba, cuatro veces el contorno blanco del logo de TZOOTZ sobre negro. Abajo, cuatro fotogramas de una losa de basalto con el logo tallado que se va llenando de oro fundido
+El logo como boceto: tallado en basalto y llenándose de oro
+Efectos y LoRA de terceros
+
+    Los diez efectos oficiales son embeddings. Se escribe embedding:minimaxh3_nombre al final del prompt, con un espacio delante y sin punto detrás. Va al final porque ComfyUI junta en una sola línea todo el texto que viene después. Funcionan con el turbo, no cuestan tiempo y traen su propio sonido.
+    Al efecto hay que dejarle sitio. Con un prompt largo, de cámara fija y con la acción guionizada, hicieron lo suyo cinco de diez. Con una sola frase que dice quién y dónde, tres más.
+    Están probados con una semilla cada uno, a 480×864, 5 s y sin foto. Sirven de mapa, no de garantía.
+
+Efecto	Qué se ve	Con qué prompt
+blooming_flowers	Brotan flores por todo el suelo desde el primer segundo.	Detallado
+fire_breath	Levanta la cabeza y escupe una llamarada hacia el segundo 3.	Detallado
+dark_magic	Abre los brazos; ojos y manos brillan en rojo en el último segundo.	Detallado
+kiss_camera	Camina hasta la cámara y besa el objetivo.	Detallado
+spiral_ascent	Abre los brazos y levita; la cámara sube con ella.	Detallado
+art_is_explosion	Una explosión enorme detrás, ella quieta delante.	Solo el mínimo
+bullet_time	La cámara da la vuelta alrededor de ella.	Solo el mínimo
+storm_magic	Gestos de conjuro y un estallido de niebla y viento.	Solo el mínimo
+truman_show	La cámara se aleja despacio, y nada más.	A medias
+four_seasons	Un acercamiento lento. No llegó a cambiar de estación en 5 s.	No se vio
+
+    El LoRA de movimiento (Motion Repair V2) carga entero y no cuesta tiempo, pero no arregla nada de forma fiable: cambia la toma entera y el estilo del movimiento, más amplio y más rápido.
+    El LoRA de órbita (ORB360) da la vuelta entera desde una sola foto, a 20 pasos y sin turbo, e inventa de forma creíble lo que la foto no enseña. El último fotograma cierra sobre el primero: 30,8 dB.
+    Cambio de personaje (Character Swap, de akatz): un LoRA de 0,155 GB sobre ref2va con nodos nativos y un prefijo en el prompt. Casa 208 de 208 módulos con el híbrido y no deja avisos de clave sin cargar. Cambia a la persona y conserva la escena, pero el mismo prompt sin el LoRA ya cambia el vestuario y la piel. A 480×864: 376 s con el turbo de 8 pasos, 362 s el control y 813 s a 20 pasos sin turbo.
+    El realismo de fal salió girado 90° en las dos tomas de la primera ronda, el control también: sin veredicto.
+
+H3 alojado, por API (ComfyUI)
+
+    Nodos de socio en ComfyUI 0.42.1: texto a vídeo, primer y último fotograma, referencias, «Context IR» (ampliador de prompts) y «Regenerate to 2K». Se pagan con créditos de Comfy y no piden clave de MiniMax.
+    Precios por segundo leídos del nodo: 768P, 0,1287 $; 2K, 0,1859 $; +0,0572 $ por imagen de referencia sobre cinco; Max Turbo, 0,0572 $; Max, 0,1144 $; «Regenerate to 2K», 0,0715 $. Sin probar la calidad de Max ni de Max Turbo.
+    Lo que impone el nodo de referencias: hace falta al menos una imagen o un vídeo (el audio solo no vale); audios de 2 s como mínimo y 15 s en total; imágenes de relación 0,4–2,5 y de 256 px como mínimo; en el prompt se citan como «Image 1», «Video 1» y «Audio 1». Imagen a vídeo y referencias no se mezclan.
+    Sin anclas a mitad de clip y sin LoRA: cada plano son dos stills, el primero y el último, y el look que sea de un LoRA tiene que llegar ya en los stills.
+    Sin comprobar: si el audio de referencia, además del timbre, dirige los labios; si el look aguanta sin LoRA; y si las condiciones de esa vía cubren publicar desde la UE.
+
+Imagen con FLUX.3
+Imagen con FLUX.3
+
+    Con referencia, la semilla fija la composición y los pasos pulen: 20 pasos dan casi la misma toma que 50 (66 s contra 161 s a 1024×1280), así que se busca semilla a 20 y se sube a 40 o 50. Sin referencia no: en texto a imagen, entre 24 y 50 pasos cambiaron el logo, el peso del rótulo y los números de las pestañas.
+    Ajustes que cuentan. Guía de 3,5 a 5 va bien; 2,5 funde el trébol. er_sde cambia el logo y dpmpp_2m sale casi como euler. La referencia a 0,4 MP deja el logo igual de fiel y ahorra unos 24 s.
+    El logo, por referencia. PNG sobre fondo liso y el emblema descrito con palabras: salió fiel unas 25 veces seguidas. La mosca de tinta negra va sobre crema; sobre negro es invisible.
+    Cajas. Cada elemento sale en su rectángulo, hasta 125 por imagen. El sujeto se define una vez y en cada caja basta «the emblem». Con celdas de unos 236 px de ancho sale fiel; con 150, a veces pierde un detalle. Las cajas guían, no son máscaras duras. El nodo oficial redondea con el round() de Python (la mitad va al par): 112,5 es 112.
+    No cuenta. Pidiendo 8 fotogramas dibujó 9 y con 6 nodos dibujó 5; en una toma con cajas salieron cuatro carriles de cinco, y los números de las pestañas salen mal. Se arregla pidiendo lo que ya dibuja, o con cajas.
+    Texto. Los rótulos grandes y cortos salen, hasta con tilde. El texto largo en letra pequeña sale basura y el microtexto de relleno nunca se lee. La pista «(spelled T-Z-O-O-T-Z)» sobra y a veces se cuela como texto. Una frase por objeto («la caja alrededor de X lleva el rótulo Y») deja cada rótulo en su sitio.
+    Las metáforas con cuerpo se dibujan. «Heart» pintó un corazón rojo, y lo mismo vale para «eye», «face» o «teeth». Para un color en el centro, «core» o «middle».
+    El aerógrafo se nota si se pide el soporte y la neblina. Los prompts de ilustración derivan a render liso. Con la mosca de referencia y «formed entirely from loose powder pigment dusted through a stencil» salió el emblema de pigmento sobre cartulina.
+    En una interfaz, «a tope» no gira la aguja: hay que decir la posición («pointing to the far right end of the scale»), y entonces gira todas las agujas de la toma salvo que a las demás se les dé una posición explícita.
+    En una valla LED de 256×64 solo leen el texto blanco o amarillo sobre fondo oscuro liso y los logos grandes y solos.
+    El ampliador de prompts oficial cuesta de 290 a 330 s por toma contra 55–60 s sin él. En la prueba no vio la referencia (mi montaje no se la pasó). Para trabajo de marca gana el prompt escrito a mano.
+    Subir resolución: el repaso img2img a 0,30 y 1,5× conserva la composición y las celdas y añade bordes limpios y grano. No corrige errores.
+    El workflow de ComfyUI y el script dan la misma imagen, píxel a píxel. Las cajas, eso sí, solo se dibujan con Nodes 2.0.
+    Un LoRA en formato diffusers puede no aplicar nada sin avisar. El de ángulos de cámara (akhaliq) dio «lora key not loaded» para las 516 claves y la toma salió idéntica a la de control. Convertido (nombres de BFL, q, k y v en un solo qkv, rango 16 a 48) aplica 172 módulos y cuesta lo mismo: 54 s a 24 pasos. Se guarda con otro nombre, porque con el mismo ComfyUI puede reutilizar el resultado en caché. Con un sujeto limpio sobre fondo liso rota bien (perfil, espalda, tres cuartos desde abajo); con un plató fotorrealista duplicó al sujeto de espaldas y cambió la ropa.
+    Contar y colorear con palabras exactas. «Exactly three… in a Y-shaped junction… none of them continues past the joint» dio tres varillas en cuatro de cuatro tomas (sin eso, una salió con cuatro). Los colores en hexadecimal fijan el tono: sin ellos el pizarra se va a verde. «About fourteen small capsule-shaped objects… the size of a thumbnail» fija la cantidad y el tamaño.
+    El tamaño de una figura de fondo se pide en metros y en fracción del cuadro. «One single small dark silhouetted person… a few metres behind her» dio una figura de 185 a 215 px de 1344 (el 14–16 %); «about five metres behind her… as tall as a fifth of the frame height» dio una de más de 440 px (un tercio del cuadro).
+    Un plano de pavor pide la expresión entera y con la sonrisa negada. Con la frase de la figura larga, la cara salió sonriendo en dos de tres tomas; con «frozen with fear: lips pressed together and absolutely not smiling, eyes wide open and wet…» quedó tensa. Pasarse con los ojos da ojos de meme.
+    Con la cara de referencia, los primeros planos pierden el sitio si el prompt no lo repite (una carretera con farolas, una calle moderna, una explanada con niebla), y la pallaza detrás de una cara cercana hace de sombrero.
+
+Imagen fija con Qwen
+
+    De foto a estilo, en modo edición: «redibuja la imagen 1 conservando su composición, con el estilo de la imagen 2». El img2img desde la foto apenas cambia nada.
+    El logo, por img2img desde su silueta exacta y en la paleta de destino, entre 0,90 y 0,94.
+    «Solo el estilo, sin personas de más». Si no se dice, se cuela el personaje de la imagen de estilo.
+    Animadas con H3 desde el primer fotograma, el trazo aguanta los cinco segundos si nada vuela. A 8 pasos sale limpio donde a 4 metía basura.
+    Cuánto denoise (img2img puro): de 0,1 a 0,3 limpia y afina; de 0,4 a 0,6 añade detalle con la misma cara; a 0,8 la cara se repinta; a 0,9, otro hombre en la misma pose; a 1,0 ignora la imagen.
+    Para que una foto siga siendo la foto: de 0,10 a 0,30. A 0,50 cambian las cejas; a 0,60 y 0,70 son otras caras.
+    Con máscara de caras (inpainting y reponer la cara original píxel a píxel con una máscara suave), la diferencia máxima con el original dentro de las caras es de 3 sobre 255.
+    La trampa de los pasos enteros: el KSampler hace int(pasos / denoise) pasos en total. Con 30 pasos, 0,59 y 0,60 son la misma toma. Para rampas finas, 50 pasos o más.
+    Un vídeo fotograma a fotograma a 0,6 no vale: los rótulos grandes se conservan, el texto pequeño cambia dígitos y el muñeco se vuelve una persona real distinta en cada fotograma. Además, 2.597 fotogramas a 40 s son 29 horas.
+
+Música con Music 3
+
+    Corre en local, en estéreo a 44,1 kHz. En 16 GB hay que decodificar por trozos, y se guarda en FLAC.
+    El instrumental no es fiable: pueden salir vocalizaciones aunque la letra vaya vacía.
+    No clava el tempo pedido. Para PRATA se pidieron 84 BPM y salieron unos 78.
+    Sale con el pico a 0 dB. Limitador antes de publicar.
+
+Motores propios de vídeo
+
+    Una escena por frase. La letra con el segundo de cada palabra sale de Whisper y cada palabra se ancla al ataque más cercano. La canción se parte en sus secciones medidas: intro, verso, parón, sección fuerte, calma, estribillo, parón, clímax y final.
+    Lo que vende un recorte de cartulina es el velo de spray que queda en el papel cuando la pieza se levanta, el bisel de luz rasante y la sombra con oclusión suave. Las piezas que se mueven llevan un jitter de ±0,9 px y ±0,12°, un flicker global de ±0,8 % y grano nuevo en cada exposición.
+    A doses, con la rejilla anclada al primer fotograma de cada escena: cada corte abre una exposición nueva. framestep=2,fps=24 de ffmpeg sale irregular, con grupos de tres fotogramas iguales; se usa un script que lee el vídeo en bruto.
+    El motor suizo es una función pura del tiempo: cualquier fotograma se puede dibujar solo y en paralelo. Usa la Bahnschrift con los ejes 700 y 75 (Bold Condensed), que es la tipografía de su hoja Letraset, y espectros, onda y medidores que leen el audio real.
+    La imagen llega, a lo sumo, un fotograma antes que el sonido (desfase mediano de +19 ms en 20 golpes y 6 cortes), y eso se tolera mejor que el retraso.
+    Trampas del motor, ya arregladas: las pistas interpolan en línea recta, así que una clave suelta estira el valor durante todo el hueco (un grupo creció un 140 % en 12 s); sale() deja la pieza desplazada; un evento que cae justo en un corte se ve ya asentado; el hash() de Python cambia entre procesos y el render en paralelo pide zlib.crc32; GaussianBlur no admite BORDER_WRAP; y de PNG a H.264 hay que convertir con matriz bt709 y etiquetarla, o los colores se desplazan.
+    H3 a doses sale a medias: un clip salió precioso, con una corona de dientes de papel que crece en el disco y el emblema que se levanta por capas, y otro parpadeaba entre el emblema y un disco de otro color cada 2 o 3 fotogramas. Con «stepped like real stop-motion» sí sale a 12 fps nativos.
+    Hay un Guion por canción (ventanas de Whisper, ataques de librosa y una escena por frase) sobre el mismo motor.
+    Pantallas de móvil con PIL, cada una una función del fotograma: foto con zoom, sello de cámara, ficha que sube, elipse, burbuja de mensaje con nota de voz. Sus tiempos salen de la transcripción de Whisper: «tres» a 10,34 s es el fotograma 41 de su tramo.
+    El texto con transparencia no se dibuja con ImageDraw.text sobre una imagen RGB: el alfa se ignora y queda opaco (la etiqueta «Yo · ahora» se pisaba con la cabecera). Se dibuja en una capa RGBA con el color a alfa 0 y se pega con ella de máscara. El recorte con transformación afín, con subpíxel, evita el temblor del zoom lento.
+    Todo lo que acompaña a una foto con zoom se calcula con la función del recorte. Un aro colocado a ojo caía a un lado de la figura; con la función que da dónde cae un punto de la imagen dentro del recorte, la elipse la rodea entera.
+
+Montaje y entrega
+
+    El audio original no se toca. Los fallos de imagen se tapan clonando fotogramas, nunca moviendo la canción.
+    Unir clips en crudo. El concatenado normal añadió un fotograma y desplazó la boca 42 ms.
+    Arranques y finales, a ojo. El detector automático de destellos marcó 7 de 9 clips y solo uno era real.
+    Se monta por los cortes medidos, no por los pedidos. Un detector busca dónde empieza de verdad cada plano: a los dos lados de un corte hay dos familias de imágenes. La diferencia entre fotogramas seguidos, sola, daba trece cortes en un clip de carrera que tenía tres.
+    Un plano que sale corto se estira repartiendo dibujos repetidos por todo el plano, en vez de congelar el final. En animación de celda no se nota.
+    Entrar en una toma un pulso tarde conserva el compás. A 120 BPM son 12 fotogramas: sirve para saltarse un arranque feo.
+    La mosca, en diferencia y abajo a la derecha. Un rótulo en screen no se lee sobre blanco: va sobre la franja oscura.
+    Fotos en movimiento: un solo factor de escala para los dos ejes. El filtro de zoom habitual las estiraba un 33 %.
+    WhatsApp no reproduce el máster en .mov. Se entrega también un MP4 con AAC.
+    La pista original, intacta, y el diseño de sonido en capas aparte. La de Suno (48 kHz estéreo, −16,4 LUFS) entra sin ganancia ni filtros; debajo van viento de aldea, un zumbido de móvil, un golpe grave con subida de aire en «ahora» y cuatro pasos sobre losa que se acercan. La mezcla sale a −16,8 LUFS con pico de −3,2 dBFS, y el MP4, en AAC a 256 kb/s.
+    El corte a negro, seco y con tiempo para ver lo que hay que ver. Estaba previsto a 27,6 s y la figura de G6 se veía 0,6 s; se llevó a 28,0 s (la figura, 1 s) y el viento se corta ahí.
+    Un montaje por tabla de fotogramas: 696 para 29 s (84, 55, 68, 83, 48, 67, 94, 48, 86, 39 y 24 de negro). Cada tramo se recorta por número de fotograma y los que quedan uno corto repiten el último. Vídeo y audio salen de 29,000 s exactos.
+
+Método
+
+    Misma semilla, una variable y una toma de control que diga cuánto se parecen dos tomas cualesquiera.
+    Tres veces di por medido algo que era un artefacto mío: que el turbo no aplicaba, que H3 no respetaba los tiempos y que a 768 se ahogaba. Las tres se corrigieron midiendo.
+    Una toma no es una prueba. El LoRA de movimiento ganaba con la primera semilla y empató con tres. Y por un solo clip que cortó tarde adelanté dos fotogramas todos los cortes: con 54 medidos, el desvío medio era cero.
+    Una tanda larga pide vigilante. Una estuvo casi cinco horas atascada sin que nadie lo viera. Ahora el lanzador vigila los vatios durante cada toma y la memoria de la ventana antes de empezarla.
+    Con láminas propias, los personajes salen de las láminas y se mueve lo dibujado, no la cámara sobre un recorte fijo. Antes de la tanda, una prueba de 5 s con música.
+    Preguntar al servidor qué modelos ve, no al disco. Y buscar en las notas antes de dar algo por nuevo.
+    Un repositorio se contrasta con el disco antes de darlo por nuevo. El listado de ficheros de la API da nombre, tamaño y sha256 sin descargar. Así salió que el TaoMate nuevo de Kijai no es el que tenemos, que la BASE de FLUX.3 local es idéntica a la vigente aunque BFL renombró los ficheros, y que el espejo sin cuenta es el oficial byte a byte.
+    La interfaz y la API se comparan píxel a píxel. Cada workflow de ComfyUI se ejecutó y se comparó con el script: diferencia cero. Por el camino salió un redondeo distinto en las cajas (JS contra Python) que cambiaba toda la imagen.
+    Una vista previa barata no es una prueba si no hay una referencia que ancle la toma: a 24 pasos y sin referencia, se elegía semilla por cosas que a 50 ya no estaban.
+    Los stills los decide él. Doce stills fotorrealistas que elegí yo, con un perro callejero bajo la lluvia de neón, le parecieron «terribles». La hoja numerada con sí y no es el filtro.
+    El modelo de visión local sirve de filtro (¿hay texto en este fotograma?: 5 de 5), no de juez.
+    Lo local es el clip de 5 s. Antonio me corrigió el 20/10: planifiqué el minuto con los 4–15 s de la API. Al planificar una pieza se parte de clips de 5 s con tres o cuatro planos y anclas (60 s son 12 clips) y cada corte se coloca como fotograma dentro de su clip.
+    Lo que tiene que leerse, medido a tamaño real. La figura de G6 pasó mi revisión de fotogramas como «hay una figura detrás» y al montar costaba verla; ahora se mide con una regla sobre el fotograma. Mi primera cifra («30 px») salió de comparar píxeles de miniatura con píxeles reales: eran de 185 a 215.
+    Una cifra equivocada se corrige en voz alta. En la revisión de la página de cortes mi primer detector contaba cambios tonales como golpes; con el detector de energía salió otra cuenta y se dijo.
+    Los ejemplos de un workflow, en su estética. La foto de plató que puse de ejemplo en el workflow de ángulos le pareció «una buena mierda»: los ejemplos, en render 3D limpio, aerógrafo o abstracto, con un solo sujeto sobre fondo liso.
+    Si pide un prompt, el prompt primero, en texto en el chat; las pruebas, después y en una línea.
+    Cuando delega, vale solo para eso. «Dale con las que creas, vamos a ver qué tal 1» dejó que los stills de esa pieza los eligiera yo; la hoja numerada con sus sí y no sigue siendo la regla para el resto.
+
+Licencias
+
+    H3 excluye la UE, Reino Unido, Corea del Sur y EE. UU. Publicar sus salidas desde Vigo pide la licencia formal de MiniMax.
+    Music 3 no tiene exclusión territorial, y obliga a decir que es IA.
+    Qwen-Image 2.1 es solo para investigación.
+    FLUX.3 klein: FLUX Kommunity License v1.0, de uso no comercial, con salidas comerciales para quien facture menos de 5 millones de dólares al año; el codificador y el ampliador son Apache 2.0. Los LoRA son derivados y heredan la licencia. El texto completo está sin leer.
+    Personas reales y fotos de terceros: permiso y derechos antes de publicar. Vale para LA GORRA, para la anciana de SAN CIPRIANIÑO (para pruebas privadas sirve; para publicar, su permiso o un personaje inventado con su vestuario y sitio) y para la cara de «La fotografía de mañana», que sale de un carnet de 251 px.
+
+Medidas
+Números de referencia
+
+Todo a 768×1344 y 124 fotogramas en la 5080, salvo donde se dice otra cosa.
+Cómo	Por paso	Por clip
+Turbo de 8 pasos, sin referencias	47 s	411–422 s
+Turbo de 8 pasos, una referencia	50 s	447–451 s
+Turbo de 8 pasos, tres referencias y guía		449–506 s
+Turbo de 8 pasos, dos fichas a 640×1120, guía y LoRA de estilo	52–55 s	461–497 s
+Turbo de 8 pasos, una o dos anclas y guía	50–51 s	446–471 s
+Turbo de 8 pasos, de tres a seis anclas y guía	53–61 s	476–547 s
+Lo mismo a 90 fotogramas (3,75 s), dos anclas	34 s	306 s
+Turbo de 4 pasos, tres referencias		276–331 s
+TaoMate de 3 pasos		201–221 s
+A tope, 20 pasos, sin referencias	43,5 s	917 s
+A tope, 20 pasos, tres referencias	55 s	1.263 s
+Turbo de 8 pasos con ControlNet 2.0	57 s	591 s
+Decodificar: VAE normal y VAE 2X		28 s y 33 s
+Cambio de personaje, turbo de 8 pasos, 480×864 con vídeo de referencia	38,9 s	376 s
+Lo mismo sin el LoRA (control)	37,7 s	362 s
+Cambio de personaje, 20 pasos sin turbo, 480×864	37,5 s	813 s
+Turbo de 8 pasos, cinco anclas (IALAB01): 864×864 y vertical		352 s y 541 s
+Clips de «streptococo» con anclas, turbo de 8 pasos		450–610 s
+Turbo de 4 pasos, una o dos anclas y guía de audio («La fotografía de mañana»)		236–246 s
+
+Dos tomas de cinco anclas tardaron 597 y 667 s con el mismo tiempo por paso. En esas dos la tarjeta marcó 15,8 y 15,9 GB, lo más alto de su tanda.
+Cortes pedidos y cortes medidos
+Cómo se pide el corte	Cortes	En su fotograma	El resto
+Con hora en el prompt, sin anclas (LA GORRA)	54 en 21 clips	15	29 a uno o dos; 10 a tres o más, entre 6 antes y 5 después. Desvío medio: cero.
+Ancla, figura entera con su entorno (ESPERA)	14 en 4 clips	14	
+Ancla, personaje entero sobre blanco (PELUCAS)	25 en 10 clips	22	3 a uno o dos.
+Ancla, solo detalles muy cerrados (ESPERA)	8 en 2 clips	2	2 a uno; 4 se adelantaron cuatro o cinco.
+Ancla, aerógrafo abstracto («streptococo», v1)	4 en 2 clips	4	
+Ancla, pigmento y cartulina («streptococo», v2)	3 en 2 clips	3	En los fotogramas 60, 120 y 178.
+Ancla, dibujo pintado, cuadrado (IALAB01)	4 en 1 clip	4	
+Lo mismo en vertical (IALAB01)	4 en 1 clip	2	2 se adelantaron: 70 por 72 y 91 por 96.
+Ancla, retrato con su decorado («La fotografía de mañana»)	3 en 3 clips	1	2 un fotograma antes: el 14 por el 14,88 (G6 y su repetición). El de G4, en el 37 por 36,96.
+LoRA de movimiento, voltereta hacia atrás
+Semilla	Sin el LoRA	Con el LoRA a 0,9	Gana
+720001	La da. Boca abajo es una bola y la cabeza reaparece en mal sitio un par de fotogramas.	Inversión limpia, con el cuerpo estirado.	El LoRA
+720011	Voltereta limpia.	Un salto en falso con el cuerpo doblado; cae y después la da.	Sin él
+720021	Voltereta limpia.	Voltereta limpia, más estirada.	Empate
+Segundos por paso	44,4	44,7	
+Los cuatro turbos, misma semilla
+Turbo	Tiempo	Nitidez	Temblor	Qué hace
+fl2v, 8 pasos (el de siempre)	457 s	196	7,8 px	Añade cosas que no se pidieron.
+ref2v, 8 pasos, 768p	456 s	125	2,6 px	El que más se ciñe al prompt. Algo más suave.
+fl2v, 4 pasos, v1.0	257 s	314		Duro de contraste. Metió un segundo personaje.
+fl2v, 4 pasos, v1.2	256 s	174		Se ciñe como el ref2v, en la mitad de tiempo.
+ControlNet 2.0, int8 contra bf16
+A 480×864	int8	bf16	Sin control
+Bordes del control que salen en la toma	45,6 %	46,4 %	15,5 %
+Sigue el movimiento del original	0,57	0,55	0,16
+Contorno del logo cubierto	33,2 %	30,7 %	16,2 %
+Segundos por paso	19,1	19,0	16,6
+Modelo int8 contra w6a8, misma toma y semilla
+6 de octubre	int8, el actual	w6a8
+Con una referencia: por paso y por clip	52,0 s · 471 s	63,3 s · 566 s
+Sin referencias: por paso y por clip	48,7 s · 440 s	59,5 s · 535 s
+Tarjeta ocupada, máximo	14,8–14,9 GB	15,1–15,2 GB
+Bitrate del vídeo	referencia	−10 % en los dos pares
+Parecido entre las dos tomas	24,7 dB con referencia y 15,9 dB sin ella: son tomas distintas
+VAE 2X contra el normal ampliado
+Mismo latente	Cara, 8 pasos	Calle, 8 pasos	Cara, 20 pasos
+Misma imagen, reducido a la mitad	44,8 dB	45,3 dB	45,1 dB
+Nitidez a 1536×2688, 2X y Lanczos	114 y 16	71 y 13	95 y 14
+Parpadeo del detalle, 2X y Lanczos	1,06 y 1,07	0,38 y 0,34	0,76 y 0,75
+FLUX.3 klein en la 5080
+Qué	Tamaño	Pasos	Tiempo
+Texto a imagen, con la carga del modelo	1344×768	50	78 s
+Texto a imagen, interfaz suiza (CHORDSLOP)	1792×1120	24 y 50	72–80 s y 149–153 s
+Texto a imagen, interfaces 9:16	864×1536	50	unos 100 s
+Edición con una referencia (foto)	1248×832	50	139 s
+Edición con el logo, interfaces 9:16	864×1536	50	160–170 s
+Marca con referencia: ola 1, macros, stills de «streptococo»	de 768×1344 a 1344×896	24	36–62 s
+Calibración con una referencia de 1 MP	1024×1280	50, 30 y 20	161, 98 y 66 s
+La misma con la referencia a 0,4 MP	1024×1280	30	74 s
+Hojas Letraset, con cajas o con prosa	1152×2048	24	100–123 s
+Matriz de 125 cajas (16.000 caracteres)	1440×2560	24	225 s
+BLACK ARK con envíos, de 21 a 33 cajas	1152×2048	24	92–151 s
+Repaso img2img a denoise 0,30	1728×3072	24	241 s
+Ampliador de prompts oficial, por toma			287–334 s
+Edición con la cara y el escenario como referencias («La fotografía de mañana»)	864×1536	24	87–96 s (la primera, 153 s)
+Lo mismo con solo el escenario	864×1536	24	66–68 s
+Limpiar la persona de la referencia del escenario	864×1536	24	129 s
+Abuela: foto entera más recorte de la cara, dos referencias	864×1536	24	88–107 s
+Abuela: una referencia, y el sitio vacío	864×1536	24	72 s y 74 s
+LoRA de ángulos convertido, una referencia a 0,5 MP	1024×1024	24	54 s
+Tríada negra, texto a imagen	1344×896	24	50–57 s (con otro trabajo a la vez, 103–105 s)
+Los dos motores propios, con la canción entera
+Motor	Fotogramas	Coste	La canción
+Recortes de cartulina	3032 (126,33 s)	1–3 s por exposición a 1536×2688	Unos 25 min con el render en tramos; 10 s en unos 4 min
+Suizo, TDR y aerógrafo	3034 (126,42 s)	0,12–0,3 s por fotograma	Unos 4 min con cuatro procesos
+
+Descartes
+Descartado o falsado
+
+    Modelos más pequeños (w4a8 y w6a8): el w4a8 iba un 41 % más lento y con un 17 % menos de detalle; el w6a8, un 22 % más lento y con un 10 % menos. Ninguno ahorra tarjeta, y con la misma semilla dan otra toma. VAE int8: el mismo vídeo y no más rápido.
+    FastH3: más rápido y no mejor, sin referencias ni guía de audio.
+    LoRA de cámara en mano con referencias: a fuerza 1 no tiembla y a 1,7 destroza la escena.
+    El LoRA de movimiento por defecto: en tres semillas de voltereta, una mejor, una peor y una igual. El turbo ya la saca solo.
+    Adelantar dos fotogramas los cortes del prompt: salieron dos fotogramas antes de su golpe. A 768 con el turbo de 8 pasos no hay sesgo que compensar.
+    Un primer plano casi abstracto como ancla: dura un fotograma y H3 dibuja otra cosa.
+    Pasear la cámara por recortes fijos de una lámina: se mueve el encuadre y no el dibujo. Con anclas se mueve lo dibujado.
+    Rellenar por inpainting lo que sobra en una ficha: dejaba una mancha. Sirvió copiar en espejo la mitad limpia del cuerpo.
+    Turbo ref2v de 4 pasos v0.1: raya los nueve primeros fotogramas.
+    Detectar por píxeles los destellos de arranque o los subtítulos quemados. Y medir por correlación la sincronía de labios: eso se mira. Se repitió el 20/10 con el movimiento de la boca contra la envolvente de la guía y sale plana en G3 y G5, y en G4 la domina el salto del corte.
+    El paquete de nodos del escalador de latentes: trae servidor propio y no tiene licencia. El VAE 2X se usa con un script nuestro.
+    El nodo de Depth Anything V3 dentro de ComfyUI: roto desde la 0.37. Se usa por script, con el modelo que ya había en disco.
+    Seedance 2.5: 1,67 dólares por clip de 5 s a 720p, y sin medir si corta a tiempo.
+    El paquete Director para H3: es código de terceros y no se instaló. De su documentación salieron las guías oficiales de prompt.
+    Spark-H3 y la atención dispersa para RTX 50: piden CUDA 13.0, y su propia ficha da PSNR 23 y LPIPS 0,14 al 10 % de densidad. Pierden calidad.
+    El turbo de Wuli para ref2va: ya está convertido para ComfyUI, pero su ficha admite que no se ha validado con un render en GPU y sus versiones ref2va son fusiones sin probar (21,4 GB).
+    El LoRA de cinta VHS: su ficha avisa de que las bases int8 deforman caras. La cinta se hace mejor en el montaje.
+    Stills fotorrealistas con tema (un perro bajo la lluvia, botas en un charco, una taza): «terribles». Para él, un still es abstracto, táctil y con el logo por partes.
+    El ampliador de prompts oficial para marca: cinco veces más caro y, en mi prueba, sin ver la referencia. Queda el prompt escrito a mano.
+    Fotogramas sueltos a denoise 0,6 para meter IA en un vídeo: 29 horas, y una persona distinta en cada fotograma.
+    Cuantizaciones y repositorios de FLUX.3 para tarjetas pequeñas (GGUF, MLX, int4), los modelos de robótica y los LoRA de FLUX.2, que no cargan en FLUX.3: no hacen falta con el int8 en 16 GB.
+    En edición con FLUX.3, er_sde (cambia el logo) y la guía 2,5 (funde el trébol).
+    El LoRA de ángulos tal cual viene: en ComfyUI no aplica nada (516 claves sin cargar) y no avisa. Hay que convertirlo.
+    Un filtro de graves para el golpe del susurro: el pico está entre 90 y 300 Hz, no por debajo de 90.
+    Pedir una figura «small… a few metres behind her» para un susto: salió del 14–16 % del alto, oscura sobre fondo oscuro, y costaba verla.
+    La foto de un plató como ejemplo del workflow de ángulos: duplica al sujeto y a Antonio no le gustó.
+
+Pendiente
+Lo que queda abierto
+
+    PRATA a 1536×2688, y guardar el latente de cada toma por defecto para poder sacarla al doble sin repetirla.
+    Órbita 360: hecha la escultura de Níquel. Faltan la mosca hecha monumento y sacar las dos al doble de tamaño.
+    Los efectos a 768×1344, con foto de referencia, a 10 s y dos a la vez. Y el LoRA de movimiento a 20 pasos sin turbo.
+    El formato oficial de prompt contra el nuestro, con la misma semilla. Lo primero, el audio declarado en un plano cantado.
+    PyTorch a cu130. No era la tarjeta: ComfyUI apaga su motor rápido con PyTorch cu129 (ahora, ComfyUI 0.41.3 y comfy-kitchen 0.2.37). Lo mismo piden la atención dispersa nativa (un tercero mide ×1,4 en una 5090 sin referencias), Spark-H3, el NVFP4 y las operaciones rápidas de int8. Es un cambio de entorno y de varios GB: solo con su sí y con ComfyUI cerrado, y con «calidad antes que velocidad» no corre prisa.
+    La costura entre clips: clavar el último fotograma del anterior o abrir en otro ángulo con el estado descrito. Otro equipo, con Seedance, vio un tirón en sus siete costuras clavadas.
+    Por qué se adelantan los cortes en los clips hechos solo de detalles muy cerrados (ESPERA) y en los planos cerrados de IALAB01 en vertical, y si pasa con menos anclas.
+    El turbo por defecto: pasar al ref2v de 8 pasos, que se ciñe más al prompt, y medirlo contra SMD Ref2VA de 8 pasos (1,96 GB, la única destilación hecha sobre ref2va), con la misma semilla y ficha.
+    ControlNet con un vídeo grabado de verdad, y con pose.
+    La licencia formal de H3 para publicar desde la UE. Y para LA GORRA, el permiso de la persona de las fotos y los derechos de esas fotos.
+    La máquina: los reinicios (memoria y BIOS; 20 entre el 14 y el 20 de octubre, dos de ellos el 20) y el disco C:, con 56 GB libres de 1,9 TB.
+    Piezas a medias: MARUXA (faltan el arranque y del 1:16 al final) y los títulos de Sangre de Guardia, sin elegir.
+    Un LoRA de Music 3 con música propia: pide más memoria de la que hay.
+    Character Swap v1.1 y v1.5 contra el v1, con una ficha dibujada, y el realismo de fal, ronda 2.
+    FLUX.3: los 360 (DenRakEiw, con costura), la v2 del LoRA de ángulos con fotos reales, probar los ángulos con la mosca y con un personaje de Sangre de Guardia, y la destilada con el codificador oficial, del espejo, para abrir los LoRA de ausboss y el modo de 16 pasos. Descargas pendientes de su permiso.
+    CHORDSLOP v2: cajas con las ocho pestañas, cinco osciloscopios y seis módulos, cinco etiquetas de carril distintas y la mosca real como referencia.
+    El ampliador de prompts con la referencia conectada y el prompt de sistema de imagen a imagen, que no se ha repetido.
+    Nodes 2.0 para dibujar las cajas en ComfyUI: activarlo cambia un ajuste persistente, así que va con su permiso.
+    «streptococo»: su opinión sobre v3, v4 y v5 y qué stills sí y cuáles no. Sin hacer: la versión sin texto, el 16:9 o el 1:1 con el mismo guion, mezclar planos de cartulina con los suizos y placas de aerógrafo reales de FLUX.3 como fondo.
+    SAN CIPRIANIÑO: su sí o no por números sobre los 20 stills de la abuela; solo lo que marque se anima.
+    La serie semanal: cuál arranca, el saldo de créditos de Comfy y un tope de gasto por semana (si no, cada envío se le pregunta), y el piloto de tres clips contra el look sin LoRA.
+    «La fotografía de mañana»: su opinión (¿se entiende la fecha de mañana, la figura y el «Yo»?), si el golpe de 100 ms del susurro se queda, el permiso de la persona de la cara y, si le vale el método, la versión de 60 s en 12 clips.
+    La página de cortes por audio: un modo local de 5 s con anclas, y una llamada real a H3 para saber si el nodo prefiere «Picture 1» o «Image 1».
+

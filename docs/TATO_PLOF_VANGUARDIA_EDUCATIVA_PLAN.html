@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>TATO + PLOF — Vertical Preschool R&D / Series Plan v0.9</title>
+<style>
+:root{
+  --paper:#f3f1e8;
+  --ink:#0b0b0b;
+  --acid:#c8ff00;
+  --red:#ff3b23;
+  --blue:#2457ff;
+  --line:rgba(11,11,11,.22);
+  --muted:#6a695f;
+  --max:1480px;
+  --pad:clamp(18px,2.2vw,36px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--ink)}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Arial Narrow","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-feature-settings:"kern" 1,"liga" 1;
+}
+a{color:inherit}
+.page{max-width:var(--max);margin:auto;overflow:hidden;background:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));}
+.rule{border-top:1.5px solid var(--ink)}
+.hair{border-top:1px solid var(--line)}
+.pad{padding:var(--pad)}
+.eyebrow,.mono,.kicker,.tag,.meta,.tiny{
+  font-family:"Courier New",ui-monospace,monospace;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.eyebrow{font-size:11px;font-weight:700}
+.tiny{font-size:10px;line-height:1.35}
+.meta{font-size:10px;line-height:1.5}
+h1,h2,h3,p{margin:0}
+h1{
+  font-size:clamp(64px,13vw,208px);
+  line-height:.76;
+  letter-spacing:-.075em;
+  font-weight:900;
+  text-transform:uppercase;
+}
+h2{
+  font-size:clamp(42px,7.4vw,118px);
+  line-height:.82;
+  letter-spacing:-.06em;
+  font-weight:900;
+  text-transform:uppercase;
+}
+h3{
+  font-size:clamp(24px,3.5vw,54px);
+  line-height:.9;
+  letter-spacing:-.035em;
+  font-weight:900;
+  text-transform:uppercase;
+}
+.lead{
+  font-size:clamp(22px,3vw,46px);
+  line-height:1.00;
+  letter-spacing:-.03em;
+  font-weight:800;
+}
+.body{
+  font-size:clamp(16px,1.35vw,21px);
+  line-height:1.22;
+  letter-spacing:-.015em;
+}
+.big-number{
+  font-size:clamp(90px,15vw,230px);
+  line-height:.7;
+  font-weight:900;
+  letter-spacing:-.09em;
+}
+.acid{background:var(--acid)}
+.black{background:var(--ink);color:var(--paper)}
+.red{background:var(--red);color:var(--ink)}
+.blue{background:var(--blue);color:white}
+.white{background:#fff}
+.outline{outline:1px solid var(--ink);outline-offset:-1px}
+.block{padding:var(--pad);border-right:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.span12{grid-column:span 12}.span9{grid-column:span 9}.span8{grid-column:span 8}
+.span7{grid-column:span 7}.span6{grid-column:span 6}.span5{grid-column:span 5}
+.span4{grid-column:span 4}.span3{grid-column:span 3}
+.hero{min-height:95vh;position:relative;border-bottom:3px solid var(--ink)}
+.hero .topline{padding:14px var(--pad);border-bottom:1px solid var(--ink)}
+.hero-title{padding:clamp(28px,5vw,80px) var(--pad) 10px}
+.hero-sub{
+  display:grid;grid-template-columns:repeat(12,1fr);
+  border-top:1px solid var(--ink);margin-top:30px
+}
+.hero-sub>div{padding:20px var(--pad);border-right:1px solid var(--ink)}
+.hero-sub .thesis{grid-column:span 8}
+.hero-sub .code{grid-column:span 4}
+.cross{
+  position:absolute;right:var(--pad);top:90px;width:64px;height:64px
+}
+.cross:before,.cross:after{content:"";position:absolute;background:var(--ink)}
+.cross:before{width:100%;height:7px;top:29px}.cross:after{height:100%;width:7px;left:29px}
+.marquee{
+  display:flex;gap:40px;white-space:nowrap;overflow:hidden;
+  font-size:13px;font-family:"Courier New",monospace;font-weight:700;
+  padding:9px 0;border-bottom:1px solid var(--ink);background:var(--acid)
+}
+.marquee span{padding-left:20px}
+.section-head{
+  display:grid;grid-template-columns:repeat(12,1fr);
+  border-bottom:1px solid var(--ink);
+}
+.section-head .num{grid-column:span 2;padding:16px var(--pad);border-right:1px solid var(--ink)}
+.section-head .title{grid-column:span 10;padding:16px var(--pad)}
+.statement{
+  padding:clamp(44px,8vw,120px) var(--pad);
+  border-bottom:1px solid var(--ink)
+}
+.statement p{
+  max-width:1180px;
+  font-size:clamp(34px,6vw,92px);
+  line-height:.91;letter-spacing:-.055em;font-weight:900;text-transform:uppercase
+}
+.statement em{font-style:normal;background:var(--acid);padding:0 .08em}
+.axis{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--ink)}
+.axis>div{padding:var(--pad);min-height:260px}
+.axis>div:first-child{border-right:1px solid var(--ink)}
+.axis h3{margin-bottom:24px}
+.axis ul,.clean{list-style:none;padding:0;margin:0}
+.axis li,.clean li{padding:8px 0;border-top:1px solid currentColor;font-size:16px;font-weight:700}
+.matrix{width:100%;border-collapse:collapse;font-size:14px}
+.matrix th,.matrix td{border:1px solid var(--ink);padding:12px;vertical-align:top;text-align:left}
+.matrix th{background:var(--ink);color:var(--paper);font-family:"Courier New",monospace;text-transform:uppercase;font-size:10px;letter-spacing:.05em}
+.matrix td strong{font-size:15px}
+.beats{display:grid;grid-template-columns:repeat(8,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--ink)}
+.beat{min-height:260px;padding:16px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);position:relative}
+.beat .n{font-size:42px;font-weight:900;line-height:.8}
+.beat .t{font-size:18px;font-weight:900;text-transform:uppercase;margin:30px 0 10px}
+.beat .s{font-size:12px;line-height:1.25}
+.beat:nth-child(2),.beat:nth-child(6){background:var(--acid)}
+.beat:nth-child(4){background:var(--red)}
+.beat:nth-child(8){background:var(--blue);color:white}
+.posterline{
+  font-size:clamp(34px,6.5vw,100px);line-height:.85;letter-spacing:-.055em;font-weight:900;text-transform:uppercase
+}
+.cards{display:grid;grid-template-columns:repeat(3,1fr)}
+.card{padding:var(--pad);min-height:320px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.card h3{margin:15px 0 35px}
+.card .idx{font:700 11px "Courier New",monospace}
+.char{
+  display:grid;grid-template-columns:repeat(12,1fr);border-bottom:1px solid var(--ink)
+}
+.char>div{padding:var(--pad)}
+.char .a{grid-column:span 5;border-right:1px solid var(--ink)}
+.char .vs{grid-column:span 2;border-right:1px solid var(--ink);display:flex;align-items:center;justify-content:center}
+.char .b{grid-column:span 5}
+.char .name{font-size:clamp(50px,8vw,120px);font-weight:900;line-height:.75;letter-spacing:-.06em}
+.char dl{display:grid;grid-template-columns:1fr 1fr;margin-top:30px;font-size:13px}
+.char dt,.char dd{margin:0;padding:8px 0;border-top:1px solid var(--ink)}
+.char dt{font-family:"Courier New",monospace;text-transform:uppercase}
+.lab{display:grid;grid-template-columns:repeat(12,1fr);border-bottom:1px solid var(--ink)}
+.lab .left{grid-column:span 7;padding:var(--pad);border-right:1px solid var(--ink)}
+.lab .right{grid-column:span 5;padding:var(--pad)}
+.metric{display:grid;grid-template-columns:70px 1fr;gap:15px;border-top:1px solid var(--ink);padding:13px 0}
+.metric b{font-size:27px}
+.kpi{font-family:"Courier New",monospace;font-size:10px;text-transform:uppercase}
+.route{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--ink)}
+.step{padding:18px;min-height:220px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.step b{font-size:34px}.step p{font-size:13px;margin-top:20px;line-height:1.25}
+.quote{
+  font-size:clamp(30px,5vw,74px);line-height:.93;letter-spacing:-.045em;font-weight:900
+}
+.source{padding:12px 0;border-top:1px solid var(--line);font-size:12px;line-height:1.3}
+.source a{text-decoration-thickness:1px;text-underline-offset:3px}
+footer{padding:30px var(--pad) 80px;border-top:8px solid var(--ink)}
+.smallcaps{text-transform:uppercase;font-weight:900}
+.stamp{
+  display:inline-block;border:3px solid currentColor;padding:8px 12px;
+  font-family:"Courier New",monospace;text-transform:uppercase;font-weight:700;transform:rotate(-2deg)
+}
+@media(max-width:920px){
+  .span9,.span8,.span7,.span6,.span5,.span4,.span3{grid-column:span 12}
+  .hero-sub .thesis,.hero-sub .code{grid-column:span 12;border-bottom:1px solid var(--ink)}
+  .axis{grid-template-columns:1fr}
+  .axis>div:first-child{border-right:0;border-bottom:1px solid var(--ink)}
+  .cards{grid-template-columns:1fr}
+  .beats{grid-template-columns:repeat(2,1fr)}
+  .beat{min-height:210px}
+  .char .a,.char .b{grid-column:span 12}
+  .char .vs{grid-column:span 12;min-height:90px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+  .lab .left,.lab .right{grid-column:span 12;border-right:0}
+  .lab .left{border-bottom:1px solid var(--ink)}
+  .route{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:clamp(62px,23vw,130px)}
+}
+@media print{
+  body{background:white}.page{max-width:none}
+  .hero{min-height:auto}.marquee{white-space:normal}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="hero">
+  <div class="topline grid">
+    <div class="span6 eyebrow">TATO + PLOF / VERTICAL PRESCHOOL R&D</div>
+    <div class="span3 eyebrow">SERIES PLAN · V0.9</div>
+    <div class="span3 eyebrow" style="text-align:right">JMR STUDIO · 2026</div>
+  </div>
+  <div class="cross" aria-hidden="true"></div>
+  <div class="hero-title">
+    <div class="eyebrow">NOT MORE CONTENT. / BETTER LEARNING.</div>
+    <h1>TATO<br>+PLOF</h1>
+  </div>
+  <div class="hero-sub">
+    <div class="thesis">
+      <p class="lead">Una microserie vertical para 2–6 años donde <span style="background:var(--acid)">aprender es lo que permite resolver la historia.</span></p>
+    </div>
+    <div class="code black">
+      <div class="meta">FORMAT// 9:16<br>DURATION// 56–72 SEC<br>CAST// 02<br>CORE// 03–05 YRS<br>ENGINE// 08×08 SEC<br>MODE// PLAY→THINK→TRANSFER</div>
+    </div>
+  </div>
+</header>
+
+<div class="marquee">
+  <span>CURIOUS ≠ ADDICTED</span><span>PLAY ≠ NOISE</span><span>REPETITION ≠ REPETITIVE</span><span>EDUCATION ≠ SCHOOL</span><span>VERTICAL ≠ CROPPED HORIZONTAL</span><span>AI ≠ AUTHOR</span>
+</div>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">00</div><div class="title"><h3>TESIS / THE ONE-LINER</h3></div>
+  </div>
+  <div class="statement">
+    <p>No queremos fabricar un <em>feed infantil.</em><br>Queremos diseñar una <em>microexperiencia de aprendizaje</em> que casualmente cabe en un Short.</p>
+  </div>
+  <div class="axis">
+    <div class="black">
+      <div class="eyebrow">NO / ECONOMÍA DE ESTÍMULO</div>
+      <h3>RETENER POR RETENER</h3>
+      <ul>
+        <li>ruido visual</li><li>cambio constante</li><li>hook agresivo</li>
+        <li>premio sin comprensión</li><li>producción automática infinita</li>
+      </ul>
+    </div>
+    <div class="acid">
+      <div class="eyebrow">YES / ECONOMÍA DE CURIOSIDAD</div>
+      <h3>QUERER SABER QUÉ PASA</h3>
+      <ul>
+        <li>problema legible</li><li>anticipación</li><li>error con sentido</li>
+        <li>descubrimiento</li><li>resolución transferible</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">01</div><div class="title"><h3>VANGUARDIA EDUCATIVA / 7 PRINCIPIOS</h3></div>
+  </div>
+  <div class="cards">
+    <article class="card acid"><div class="idx">01 / CAUSAL LEARNING</div><h3>EL CONCEPTO MUEVE LA TRAMA</h3><p class="body">Si quitamos el aprendizaje, el problema ya no puede resolverse. “Rojo” no se recita: identificar rojo abre la caja correcta.</p></article>
+    <article class="card"><div class="idx">02 / PREDICTION</div><h3>ANTES DE EXPLICAR, HACER PENSAR</h3><p class="body">El niño recibe información suficiente para anticipar. La pregunta no examina: activa una hipótesis.</p></article>
+    <article class="card blue"><div class="idx">03 / TRANSFER</div><h3>DE LA PANTALLA AL MUNDO</h3><p class="body">Cada episodio debe permitir una acción real después: ordenar, contar, comparar, buscar, turnarse, probar.</p></article>
+    <article class="card"><div class="idx">04 / JME</div><h3>DISEÑADO PARA SER COMPARTIDO</h3><p class="body">Incluimos “puentes de conversación”: una frase o acción que el adulto pueda continuar fuera de la pantalla.</p></article>
+    <article class="card red"><div class="idx">05 / PRODUCTIVE FAILURE</div><h3>EQUIVOCARSE ES ACCIÓN</h3><p class="body">Tato y Plof prueban, fallan, comparan y corrigen. No hay sermón: hay evidencia visible.</p></article>
+    <article class="card"><div class="idx">06 / REPLAY VALUE</div><h3>REPETIR PARA DOMINAR</h3><p class="body">La segunda visión no es consumo duplicado: permite anticipar antes, nombrar antes y detectar el patrón.</p></article>
+    <article class="card black"><div class="idx">07 / LOW-NOISE DESIGN</div><h3>CURIOSIDAD &gt; SOBREESTIMULACIÓN</h3><p class="body">Pocos focos simultáneos. Silueta clara. Audio legible. Movimiento motivado por la historia.</p></article>
+    <article class="card acid"><div class="idx">RULE / 01</div><h3>UNA COSA</h3><p class="body">1 deseo · 1 problema · 1 concepto · 1 localización · máx. 2 errores · 1 resolución.</p></article>
+    <article class="card"><div class="idx">RULE / 03</div><h3>REGLA DE TRES</h3><p class="body">Tres pistas, objetos, intentos, sonidos o repeticiones cuando ayude a percibir el patrón.</p></article>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">02</div><div class="title"><h3>STORY ENGINE / 64 SECOND SYSTEM</h3></div>
+  </div>
+  <div class="block span12">
+    <p class="posterline">DESEO → OBSTÁCULO → ERROR → ERROR MEJOR → DESCUBRIMIENTO → SOLUCIÓN → ECO</p>
+  </div>
+  <div class="beats">
+    <div class="beat"><div class="n">01</div><div class="t">Anomalía</div><div class="s">0–8s<br>Pregunta visual. Algo no encaja.</div></div>
+    <div class="beat"><div class="n">02</div><div class="t">Deseo</div><div class="s">8–16s<br>Sabemos qué quiere el personaje.</div></div>
+    <div class="beat"><div class="n">03</div><div class="t">Intento</div><div class="s">16–24s<br>La solución intuitiva.</div></div>
+    <div class="beat"><div class="n">04</div><div class="t">Fallo</div><div class="s">24–32s<br>Gag + consecuencia comprensible.</div></div>
+    <div class="beat"><div class="n">05</div><div class="t">Mejora</div><div class="s">32–40s<br>Segundo intento: ya hay aprendizaje.</div></div>
+    <div class="beat"><div class="n">06</div><div class="t">Predicción</div><div class="s">40–48s<br>Pregunta + pausa real. El niño puede anticipar.</div></div>
+    <div class="beat"><div class="n">07</div><div class="t">Solución</div><div class="s">48–56s<br>El concepto se aplica y funciona.</div></div>
+    <div class="beat"><div class="n">08</div><div class="t">Eco</div><div class="s">56–64s<br>Callback cómico + huella para repetir.</div></div>
+  </div>
+  <div class="grid">
+    <div class="block span8"><p class="lead">La restricción técnica de clips cortos se convierte en gramática. <strong>8 beats × ~8 s</strong> = una unidad narrativa reconocible, testeable y producible.</p></div>
+    <div class="block span4 black"><div class="eyebrow">HOOK POLICY</div><p class="lead" style="margin-top:15px">NO GRITOS.<br>NO FLASH.<br>UNA PREGUNTA VISUAL.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">03</div><div class="title"><h3>CHARACTER ENGINE / DOS FUERZAS</h3></div>
+  </div>
+  <div class="char">
+    <div class="a">
+      <div class="eyebrow">CHARACTER A / WORKING LOGIC</div>
+      <div class="name">TATO</div>
+      <dl>
+        <dt>ritmo</dt><dd>observa primero</dd>
+        <dt>fuerza</dt><dd>patrones / orden</dd>
+        <dt>error</dt><dd>pensar demasiado</dd>
+        <dt>humor</dt><dd>anticipación</dd>
+        <dt>lenguaje</dt><dd>algo más verbal</dd>
+      </dl>
+    </div>
+    <div class="vs acid"><div class="big-number">×</div></div>
+    <div class="b">
+      <div class="eyebrow">CHARACTER B / ACTION LOGIC</div>
+      <div class="name">PLOF</div>
+      <dl>
+        <dt>ritmo</dt><dd>prueba primero</dd>
+        <dt>fuerza</dt><dd>exploración / acción</dd>
+        <dt>error</dt><dd>precipitarse</dd>
+        <dt>humor</dt><dd>físico / slapstick</dd>
+        <dt>lenguaje</dt><dd>gestual / directo</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="statement acid">
+    <p>Ninguno es el profesor.<br><em>Ambos saben algo que el otro no sabe.</em></p>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">04</div><div class="title"><h3>CURRÍCULO INVISIBLE / NO “CLASES”</h3></div>
+  </div>
+  <div class="block span12" style="overflow:auto">
+    <table class="matrix">
+      <thead><tr><th>Dominio</th><th>Conceptos</th><th>Motor dramático</th><th>Transferencia real</th></tr></thead>
+      <tbody>
+      <tr><td><strong>Lenguaje espacial</strong></td><td>dentro/fuera · arriba/abajo · delante/detrás</td><td>encontrar / alcanzar</td><td>“Busca algo debajo de…”</td></tr>
+      <tr><td><strong>Cantidad</strong></td><td>1–5 · más/menos · uno para cada uno</td><td>transportar / repartir</td><td>repartir 3 objetos reales</td></tr>
+      <tr><td><strong>Forma + patrón</strong></td><td>igual/diferente · secuencia · encajar</td><td>construir / reparar</td><td>continuar un patrón físico</td></tr>
+      <tr><td><strong>Causa / efecto</strong></td><td>peso · equilibrio · rodar · caer</td><td>experimentar / construir</td><td>probar con objetos seguros</td></tr>
+      <tr><td><strong>Funciones ejecutivas</strong></td><td>esperar · recordar regla · cambiar estrategia</td><td>turnarse / resolver</td><td>juego de turnos</td></tr>
+      <tr><td><strong>Socioemocional</strong></td><td>pedir ayuda · frustración · reparar · compartir</td><td>conflicto entre dos</td><td>nombrar emoción / alternativa</td></tr>
+      <tr><td><strong>Creatividad</strong></td><td>usos alternativos · imaginar · combinar</td><td>transformar</td><td>“¿Qué más podría ser esto?”</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid">
+    <div class="block span5 black"><div class="eyebrow">INTERNAL</div><p class="lead">El equipo ve currículo.</p></div>
+    <div class="block span7 acid"><div class="eyebrow">ON SCREEN</div><p class="lead">El niño ve a Plof intentando llevar cinco pelotas sin que se le caigan.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">05</div><div class="title"><h3>NATIVE VERTICAL / DRAMATURGIA 9:16</h3></div>
+  </div>
+  <div class="grid">
+    <div class="block span4"><div class="eyebrow">VERTICAL VERBS</div><h3>SUBIR / CAER / APILAR</h3><p class="body" style="margin-top:24px">Saltar, crecer, encoger, meter/sacar, colgar, gotear, ascender, descender, equilibrar.</p></div>
+    <div class="block span4 acid"><div class="eyebrow">FOCUS RULE</div><div class="big-number">03</div><p class="lead">máximo tres focos semánticos.</p></div>
+    <div class="block span4 black"><div class="eyebrow">DEFAULT STAGE</div><h3>TATO + PLOF + OBJETO</h3><p class="body" style="margin-top:24px">El 9:16 se trata como teatro de títeres digital, no como 16:9 recortado.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">06</div><div class="title"><h3>EPISODE CARD / UNA PÁGINA ANTES DE GENERAR</h3></div>
+  </div>
+  <div class="grid">
+    <div class="block span4 red"><h3>DESEO</h3><p class="body">¿Qué quiere conseguir exactamente el personaje?</p></div>
+    <div class="block span4"><h3>OBSTÁCULO</h3><p class="body">¿Qué impide conseguirlo de forma visible?</p></div>
+    <div class="block span4 acid"><h3>CONCEPTO</h3><p class="body">¿Qué conocimiento desbloquea la solución?</p></div>
+    <div class="block span3"><h3>ERROR 01</h3><p class="body">Intuición equivocada.</p></div>
+    <div class="block span3"><h3>ERROR 02</h3><p class="body">Mejor, pero incompleto.</p></div>
+    <div class="block span3 blue"><h3>PREGUNTA</h3><p class="body">¿Qué puede predecir el niño?</p></div>
+    <div class="block span3"><h3>SOLUCIÓN</h3><p class="body">Aplicación visible del concepto.</p></div>
+    <div class="block span4 black"><h3>EMOCIÓN</h3><p class="body">¿Qué cambia entre Tato y Plof?</p></div>
+    <div class="block span4"><h3>TRANSFER</h3><p class="body">¿Qué puede hacer fuera de pantalla?</p></div>
+    <div class="block span4 acid"><h3>CALLBACK</h3><p class="body">Último gag que recompensa volver a verlo.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">07</div><div class="title"><h3>LAB / EL CANAL COMO I+D EDUCATIVO</h3></div>
+  </div>
+  <div class="lab">
+    <div class="left">
+      <p class="quote">NO PREGUNTAR “¿TE GUSTÓ?”. MEDIR QUÉ <span style="background:var(--acid)">HIZO, DIJO, ANTICIPÓ Y RECORDÓ.</span></p>
+    </div>
+    <div class="right">
+      <div class="metric"><b>01</b><div><span class="kpi">Attention</span><br>¿abandona o sigue por comprensión?</div></div>
+      <div class="metric"><b>02</b><div><span class="kpi">Prediction</span><br>¿anticipa la solución?</div></div>
+      <div class="metric"><b>03</b><div><span class="kpi">Response</span><br>¿responde a la pausa?</div></div>
+      <div class="metric"><b>04</b><div><span class="kpi">Recall</span><br>¿recuerda después?</div></div>
+      <div class="metric"><b>05</b><div><span class="kpi">Transfer</span><br>¿lo aplica a un objeto real?</div></div>
+      <div class="metric"><b>06</b><div><span class="kpi">Replay</span><br>¿quiere repetirlo?</div></div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="block span4"><div class="eyebrow">A/B 01</div><h3>PAUSA 2s vs 4s</h3></div>
+    <div class="block span4"><div class="eyebrow">A/B 02</div><h3>56s vs 72s</h3></div>
+    <div class="block span4"><div class="eyebrow">A/B 03</div><h3>1 FALLO vs 2</h3></div>
+  </div>
+  <div class="block span12 acid"><p class="lead">La ventaja no será “tenemos IA”. Será tener una base propia de qué estructuras consiguen <strong>comprensión + diversión + transferencia</strong> en nuestros personajes.</p></div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">08</div><div class="title"><h3>SEASON ZERO / 24 PREMISES</h3></div>
+  </div>
+  <div class="grid">
+    <div class="block span5 black">
+      <div class="eyebrow">4 STORY MOTORS</div>
+      <p class="posterline" style="margin-top:20px">ENCONTRAR<br>CONSTRUIR<br>TRANSPORTAR<br>COMPARTIR</p>
+    </div>
+    <div class="block span2 acid" style="display:flex;align-items:center;justify-content:center"><div class="big-number">×</div></div>
+    <div class="block span5">
+      <div class="eyebrow">6 LEARNING DOMAINS</div>
+      <p class="posterline" style="margin-top:20px">POSICIÓN<br>CANTIDAD<br>FORMA<br>CAUSA<br>EMOCIÓN<br>COOPERAR</p>
+    </div>
+    <div class="block span12 red"><div class="big-number">24</div><p class="lead">PREMISAS / un mapa de temporada antes de producir una temporada.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">09</div><div class="title"><h3>BUSINESS / IP FIRST</h3></div>
+  </div>
+  <div class="statement">
+    <p>El moat no es generar barato.<br>El moat es <em>PERSONAJES + SISTEMA + DATOS + CATÁLOGO.</em></p>
+  </div>
+  <div class="grid">
+    <div class="block span3"><div class="eyebrow">DISCOVERY</div><h3>SHORTS</h3><p class="body" style="margin-top:20px">56–72 s. Microepisodio autónomo. Descubrimiento y repetición.</p></div>
+    <div class="block span3"><div class="eyebrow">DEPTH</div><h3>LONG FORM</h3><p class="body" style="margin-top:20px">Compilaciones temáticas y especiales. Catálogo y consumo acompañado.</p></div>
+    <div class="block span3 acid"><div class="eyebrow">PARENT LAYER</div><h3>ADULT CHANNEL</h3><p class="body" style="margin-top:20px">Web/social para padres: actividades, fichas, metodología, feedback.</p></div>
+    <div class="block span3 black"><div class="eyebrow">LATER</div><h3>LICENSING</h3><p class="body" style="margin-top:20px">Libros, música, juego/app, broadcast, licencias. Solo después de probar IP.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">10</div><div class="title"><h3>PRODUCTION / HUMAN STORY, MACHINE SCALE</h3></div>
+  </div>
+  <div class="route">
+    <div class="step acid"><b>01</b><p><strong>PREMISA</strong><br>Humano. Deseo + problema + aprendizaje.</p></div>
+    <div class="step"><b>02</b><p><strong>EPISODE CARD</strong><br>Validar causalidad y transferencia.</p></div>
+    <div class="step"><b>03</b><p><strong>8-BEAT BOARD</strong><br>Una imagen/acción dominante por beat.</p></div>
+    <div class="step"><b>04</b><p><strong>GENERACIÓN</strong><br>IA local. Consistencia de personaje y espacio.</p></div>
+    <div class="step"><b>05</b><p><strong>EDITORIAL QC</strong><br>Audio, ritmo, claridad, seguridad, continuidad.</p></div>
+    <div class="step black"><b>06</b><p><strong>LEARNING QC</strong><br>¿Predice? ¿Comprende? ¿Transfiere?</p></div>
+  </div>
+  <div class="block span12"><p class="lead">La IA industrializa <strong>render y variación</strong>. La autoría humana protege <strong>sentido, desarrollo, seguridad y coherencia.</strong></p></div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">11</div><div class="title"><h3>GO / NO-GO CHECK</h3></div>
+  </div>
+  <div class="grid">
+    <div class="block span6 black">
+      <div class="eyebrow">REJECT EPISODE IF</div>
+      <ul class="clean" style="margin-top:25px">
+        <li>el aprendizaje puede quitarse sin afectar la historia</li>
+        <li>hay más de un problema central</li>
+        <li>la pregunta no se puede responder con lo visto</li>
+        <li>el error existe solo para rellenar tiempo</li>
+        <li>hay estímulo sin función narrativa</li>
+        <li>el final no resuelve lo planteado</li>
+      </ul>
+    </div>
+    <div class="block span6 acid">
+      <div class="eyebrow">GREENLIGHT IF</div>
+      <ul class="clean" style="margin-top:25px">
+        <li>el niño entiende qué quiere el personaje</li>
+        <li>puede anticipar algo antes del final</li>
+        <li>el concepto cambia la acción</li>
+        <li>hay una emoción legible</li>
+        <li>se puede repetir con más dominio</li>
+        <li>existe una pequeña transferencia fuera de pantalla</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">12</div><div class="title"><h3>ROADMAP / NO CONTENT FACTORY</h3></div>
+  </div>
+  <div class="route">
+    <div class="step"><b>01</b><p><strong>SERIES BIBLE</strong><br>Personajes, reglas, mundo, lenguaje, pedagogía.</p></div>
+    <div class="step acid"><b>02</b><p><strong>24 PREMISES</strong><br>Matriz de temporada completa.</p></div>
+    <div class="step"><b>03</b><p><strong>06 SCRIPTS</strong><br>Seis hipótesis narrativas distintas.</p></div>
+    <div class="step"><b>04</b><p><strong>06 PILOTS</strong><br>Mismo estándar técnico.</p></div>
+    <div class="step red"><b>05</b><p><strong>KID TEST</strong><br>Comprensión, predicción, transferencia, replay.</p></div>
+    <div class="step black"><b>06</b><p><strong>LAUNCH</strong><br>Banco listo + cadencia sostenible + aprendizaje continuo.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">13</div><div class="title"><h3>MANIFESTO / POST-ALGORITHM PRESCHOOL</h3></div>
+  </div>
+  <div class="statement black">
+    <p>NO OPTIMIZAR AL NIÑO PARA EL ALGORITMO.<br><em>OPTIMIZAR EL MEDIO PARA EL NIÑO.</em></p>
+  </div>
+  <div class="grid">
+    <div class="block span4 acid"><div class="big-number">01</div><p class="lead">PLAY</p></div>
+    <div class="block span4 red"><div class="big-number">02</div><p class="lead">THINK</p></div>
+    <div class="block span4 blue"><div class="big-number">03</div><p class="lead">TRANSFER</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="num mono">↳</div><div class="title"><h3>RESEARCH BASIS / SHORT LIST</h3></div>
+  </div>
+  <div class="pad">
+    <div class="source"><strong>YouTube — Kids & Family Quality Principles.</strong> Curiosidad, pensamiento crítico, creatividad, narrativas claras; advierte contra contenido confuso, falsamente educativo o generado en masa. <a href="https://support.google.com/youtube/answer/10774223?hl=es">support.google.com/youtube/answer/10774223</a></div>
+    <div class="source"><strong>YouTube Kids — Preschool band.</strong> La configuración preescolar está diseñada para 4 años o menos; 5–8 constituye la siguiente banda. <a href="https://support.google.com/youtube/answer/10938174?hl=es">support.google.com/youtube/answer/10938174</a></div>
+    <div class="source"><strong>Strouse et al. (2018), Journal of Experimental Child Psychology.</strong> El modelado parental durante co-viewing apoyó aprendizaje de palabras en niños de 30 meses. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5777334/">PMC5777334</a></div>
+    <div class="source"><strong>Barr et al. / Family media ecology review.</strong> Joint Media Engagement puede reforzar aprendizaje y transferencia conectando pantalla con mundo real. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6697422/">PMC6697422</a></div>
+    <div class="source"><strong>Heimann et al. (2021).</strong> En niños de 2 años, JME superó a la visualización 2D sin apoyo, aunque la demostración 3D presencial siguió siendo superior. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7868415/">PMC7868415</a></div>
+    <div class="source"><strong>Transfer of learning review.</strong> La repetición puede sostener atención y aumentar comprensión del contenido televisivo en preescolares. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2885850/">PMC2885850</a></div>
+    <div class="source"><strong>AAP / HealthyChildren.</strong> Para 2–5 años recomienda contenido de alta calidad y co-viewing para ayudar a comprender y aplicar lo visto al mundo. <a href="https://www.healthychildren.org/Spanish/news/Paginas/aap-announces-new-recommendations-for-childrens-media-use.aspx">healthychildren.org</a></div>
+  </div>
+</section>
+
+<footer class="black">
+  <div class="grid">
+    <div class="span8">
+      <div class="stamp">TATO + PLOF / R&D UNIT</div>
+      <p class="lead" style="margin-top:28px">A SERIES IS NOT A STREAM OF CLIPS.<br>IT IS A <span style="color:var(--acid)">LEARNING SYSTEM WITH CHARACTERS.</span></p>
+    </div>
+    <div class="span4 meta" style="padding-top:10px">
+      DOCUMENT// STRATEGIC DISTILLATION<br>
+      FORMAT// RESPONSIVE HTML / OFFLINE-SAFE<br>
+      DESIGN// SWISS GRID × POST-DIGITAL GROTESK<br>
+      STATUS// WORKING MANIFESTO<br>
+      DATE// 14.09.2026
+    </div>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

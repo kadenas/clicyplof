@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Clic y Plof · Temporada 0</title>
+<meta name="description" content="Biblia de la temporada 0 de Clic y Plof: personajes, motor de ocho beats, rejilla de motores y dominios, y los veinticinco episodios.">
+<!-- Favicon: el mismo emoji que tenía el informe en claude.ai, en SVG para no depender de ningún archivo -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#F7F6F4;
+    --card:#FFFFFF;
+    --ink:#1F1D1B;
+    --ink-soft:#57524C;
+    --ink-faint:#8B847C;
+    --line:#E4E0DA;
+    --shadow:0 1px 2px rgba(31,29,27,.05), 0 8px 24px -12px rgba(31,29,27,.18);
+    --shadow-lift:0 2px 4px rgba(31,29,27,.06), 0 18px 40px -18px rgba(31,29,27,.28);
+
+    /* Los seis colores de plastilina. Ninguno es azul: en la serie el azul
+       está reservado a los dos personajes y cualquier objeto azul se
+       confundiría con sus cuerpos. */
+    --pos:#D93B33;
+    --can:#E8762A;
+    --for:#E0AE1E;
+    --cau:#2F9450;
+    --emo:#D4568F;
+    --coo:#7B4FC0;
+
+    --azul:#2C74D6;      /* el azul de Clic y Plof */
+    --azul-soft:#E8F0FC;
+
+    --f-display:"Fredoka","Trebuchet MS",sans-serif;
+    --f-body:"Karla","Helvetica Neue",Arial,sans-serif;
+    --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#16151A;
+      --card:#1E1D24;
+      --ink:#F2EFEA;
+      --ink-soft:#B4ADA4;
+      --ink-faint:#837C74;
+      --line:#302E38;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+      --shadow-lift:0 2px 4px rgba(0,0,0,.45), 0 18px 40px -18px rgba(0,0,0,.7);
+      --pos:#F2655C; --can:#F59355; --for:#EFC64A; --cau:#4FBE74; --emo:#E87FAB; --coo:#A379E0;
+      --azul:#6BA4F0; --azul-soft:#1C2740;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#16151A;
+    --card:#1E1D24;
+    --ink:#F2EFEA;
+    --ink-soft:#B4ADA4;
+    --ink-faint:#837C74;
+    --line:#302E38;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    --shadow-lift:0 2px 4px rgba(0,0,0,.45), 0 18px 40px -18px rgba(0,0,0,.7);
+    --pos:#F2655C; --can:#F59355; --for:#EFC64A; --cau:#4FBE74; --emo:#E87FAB; --coo:#A379E0;
+    --azul:#6BA4F0; --azul-soft:#1C2740;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--f-body);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%}
+  .wrap{max-width:1040px;margin:0 auto;padding-inline:20px;padding-block:0}
+  section{padding-block:clamp(38px,6vw,64px);border-top:1px solid var(--line)}
+  section:first-of-type{border-top:0}
+  h2{
+    font-family:var(--f-display);font-weight:600;
+    font-size:clamp(1.4rem,3.4vw,1.9rem);line-height:1.2;
+    margin:0 0 6px;text-wrap:balance;letter-spacing:-.01em;
+  }
+  .sub{color:var(--ink-soft);max-width:62ch;margin:0 0 26px}
+  p{margin:0 0 14px;max-width:66ch}
+  .eyebrow{
+    font-family:var(--f-mono);font-size:.7rem;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);
+    margin:0 0 10px;
+  }
+
+  /* ── Cabecera: reproduce el rótulo real de la serie, con los colores que
+       tienen las letras de plastilina en el título ───────────────────── */
+  header{padding-block:clamp(44px,8vw,80px) clamp(30px,5vw,48px)}
+  .rotulo{font-family:var(--f-display);font-weight:700;line-height:.92;margin:0 0 18px}
+  .rotulo .linea{display:block;font-size:clamp(3.1rem,13vw,6.4rem);letter-spacing:.01em}
+  .rotulo .y{
+    display:block;font-size:clamp(1.3rem,4.4vw,2.1rem);
+    color:var(--coo);font-weight:500;margin:2px 0 2px 4px;
+  }
+  .c1{color:var(--pos)} .c2{color:var(--can)} .c3{color:var(--for)} .c4{color:var(--cau)}
+  .lede{font-size:clamp(1.02rem,2.1vw,1.16rem);color:var(--ink-soft);max-width:56ch;margin:0 0 26px}
+  .lede strong{color:var(--ink);font-weight:700}
+
+  .datos{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+  .dato{flex:1 1 150px;padding:14px 18px;border-right:1px solid var(--line)}
+  .dato:last-child{border-right:0}
+  .dato dt{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 3px}
+  .dato dd{margin:0;font-family:var(--f-display);font-weight:600;font-size:1.22rem;font-variant-numeric:tabular-nums}
+  .dato dd span{font-size:.8rem;font-weight:400;color:var(--ink-soft);font-family:var(--f-body)}
+
+  /* ── Personajes ───────────────────────────────────────────────────── */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .pers{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
+  .silueta{height:62px;display:flex;align-items:flex-end;gap:7px;margin-bottom:14px}
+  .silueta i{display:block;background:var(--azul);border-radius:999px}
+  .alto  .cuerpo{width:20px;height:58px}
+  .alto  .cabeza{width:30px;height:30px;margin-bottom:28px;margin-left:-25px}
+  .bajo  .cuerpo{width:38px;height:32px}
+  .bajo  .cabeza{width:33px;height:33px;margin-bottom:22px;margin-left:-35px}
+  .pers h3{font-family:var(--f-display);font-weight:600;font-size:1.5rem;margin:0 0 2px}
+  .pers .rol{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 10px}
+  .pers p{margin:0;color:var(--ink-soft);font-size:.95rem}
+
+  .tesis{
+    margin-top:20px;background:var(--azul-soft);border-radius:18px;padding:22px 24px;
+    font-family:var(--f-display);font-weight:500;font-size:clamp(1.05rem,2.4vw,1.3rem);
+    line-height:1.45;color:var(--ink);
+  }
+  .tesis b{color:var(--azul);font-weight:600}
+
+  /* ── Motor de 8 beats ─────────────────────────────────────────────── */
+  .beats{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+  .beat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 10px;text-align:center}
+  .beat .n{font-family:var(--f-mono);font-size:.68rem;color:var(--ink-faint);display:block}
+  .beat .nm{font-family:var(--f-display);font-weight:500;font-size:.88rem;display:block;margin:3px 0 2px;line-height:1.2}
+  .beat .s{font-family:var(--f-mono);font-size:.68rem;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+  .beat.pred{border-color:var(--azul);box-shadow:inset 0 0 0 1px var(--azul)}
+  .nota{font-size:.88rem;color:var(--ink-soft);margin-top:14px}
+
+  .montajes{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+  .montaje{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+  .montaje h4{font-family:var(--f-display);font-weight:600;font-size:1.05rem;margin:0 0 4px}
+  .montaje .dur{font-family:var(--f-mono);font-size:1.5rem;font-weight:600;font-variant-numeric:tabular-nums;display:block;margin:6px 0 8px}
+  .montaje p{font-size:.9rem;color:var(--ink-soft);margin:0}
+
+  /* ── Rejilla 4 × 6 ────────────────────────────────────────────────── */
+  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table.rejilla{border-collapse:separate;border-spacing:6px;min-width:620px;margin:0 -6px}
+  table.rejilla th{
+    font-family:var(--f-mono);font-size:.66rem;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-faint);padding:0 0 4px;text-align:center;font-weight:600;
+  }
+  table.rejilla th.motor{text-align:right;padding-right:10px;color:var(--ink-soft);white-space:nowrap}
+  table.rejilla td{
+    background:var(--card);border:1px solid var(--line);border-radius:11px;
+    text-align:center;padding:11px 6px;font-family:var(--f-mono);font-weight:500;
+    font-size:.92rem;font-variant-numeric:tabular-nums;min-width:62px;
+  }
+  td.d1{border-bottom:3px solid var(--pos)} td.d2{border-bottom:3px solid var(--can)}
+  td.d3{border-bottom:3px solid var(--for)} td.d4{border-bottom:3px solid var(--cau)}
+  td.d5{border-bottom:3px solid var(--emo)} td.d6{border-bottom:3px solid var(--coo)}
+  td .hecho{color:var(--cau);font-weight:600}
+
+  /* ── Lista de episodios ───────────────────────────────────────────── */
+  .eps{display:flex;flex-direction:column;gap:9px}
+  .ep{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:15px 18px;display:grid;gap:4px 16px;
+    grid-template-columns:44px minmax(0,1fr) 150px;
+    align-items:start;box-shadow:var(--shadow);
+  }
+  .ep:hover{box-shadow:var(--shadow-lift)}
+  .ep .num{
+    font-family:var(--f-mono);font-weight:600;font-size:1.02rem;font-variant-numeric:tabular-nums;
+    color:var(--ink-faint);grid-row:1/3;padding-top:2px;
+  }
+  .ep .cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px}
+  .ep h3{font-family:var(--f-display);font-weight:600;font-size:1.16rem;margin:0;line-height:1.25}
+  .ep .celda{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint)}
+  .ep .cuerpo{grid-column:2;color:var(--ink-soft);font-size:.93rem}
+  .ep .cuerpo .reto{display:block}
+  .ep .cuerpo .concepto{display:block;margin-top:3px;color:var(--ink);font-weight:500}
+  .ep .cuerpo .concepto::before{content:"→ ";color:var(--ink-faint);font-weight:400}
+  .ep .lado{grid-column:3;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+  .chip{
+    font-family:var(--f-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;
+    font-weight:600;padding:3px 8px;border-radius:999px;color:#fff;white-space:nowrap;
+  }
+  .chip.d1{background:var(--pos)} .chip.d2{background:var(--can)} .chip.d3{background:var(--for);color:#3A2C05}
+  .chip.d4{background:var(--cau)} .chip.d5{background:var(--emo)} .chip.d6{background:var(--coo)}
+  :root[data-theme="dark"] .chip.d1,:root[data-theme="dark"] .chip.d2,:root[data-theme="dark"] .chip.d4,
+  :root[data-theme="dark"] .chip.d5,:root[data-theme="dark"] .chip.d6{color:#16151A}
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) .chip.d1,:root:not([data-theme="light"]) .chip.d2,
+    :root:not([data-theme="light"]) .chip.d4,:root:not([data-theme="light"]) .chip.d5,
+    :root:not([data-theme="light"]) .chip.d6{color:#16151A}
+  }
+  /* Quién resuelve. En la serie los dos son del mismo azul y solo se
+     distinguen por la silueta, así que aquí también. */
+  .quien{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--ink-soft)}
+  .quien i{display:inline-block;background:var(--azul);flex:none}
+  .quien i.tall{width:6px;height:17px;border-radius:999px}
+  .quien i.round{width:15px;height:15px;border-radius:999px}
+  .ep.hecho{border-color:var(--cau)}
+  .ep.hecho .num{color:var(--cau)}
+  .listo{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--cau);font-weight:600;border:1px solid var(--cau);border-radius:999px;padding:2px 7px}
+
+  /* ── Reglas ───────────────────────────────────────────────────────── */
+  .reglas{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px}
+  .regla{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+  .regla h3{font-family:var(--f-display);font-weight:600;font-size:1.06rem;margin:0 0 7px}
+  .regla p{font-size:.92rem;color:var(--ink-soft);margin:0}
+  .regla p + p{margin-top:9px}
+
+  .balance{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .balance div{
+    flex:1 1 110px;background:var(--card);border:1px solid var(--line);border-radius:13px;
+    padding:13px 15px;display:flex;align-items:center;gap:10px;
+  }
+  .balance b{font-family:var(--f-mono);font-size:1.32rem;font-weight:600;font-variant-numeric:tabular-nums}
+  .balance span{font-size:.85rem;color:var(--ink-soft)}
+
+  ol.orden{counter-reset:o;list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px}
+  ol.orden li{counter-increment:o;display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:start}
+  ol.orden li::before{
+    content:counter(o);font-family:var(--f-mono);font-weight:600;font-size:.82rem;
+    color:var(--ink-faint);border:1px solid var(--line);border-radius:999px;
+    width:30px;height:30px;display:grid;place-items:center;background:var(--card);
+  }
+  ol.orden p{margin:0;font-size:.95rem;color:var(--ink-soft);padding-top:3px}
+  ol.orden strong{color:var(--ink)}
+
+  footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--ink-faint);font-size:.83rem}
+  footer p{max-width:70ch;margin:0}
+
+  @media (max-width:820px){
+    .beats{grid-template-columns:repeat(4,1fr)}
+    .ep{grid-template-columns:38px minmax(0,1fr)}
+    .ep .lado{grid-column:2;grid-row:auto;flex-direction:row;align-items:center;flex-wrap:wrap;margin-top:6px}
+  }
+  @media (max-width:560px){
+    .duo,.montajes{grid-template-columns:1fr}
+    .beats{grid-template-columns:repeat(2,1fr)}
+    .dato{flex:1 1 50%;border-bottom:1px solid var(--line)}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Biblia de temporada · Serie infantil de plastilina</p>
+  <h1 class="rotulo">
+    <span class="linea"><span class="c1">C</span><span class="c2">L</span><span class="c3">I</span><span class="c4">C</span></span>
+    <span class="y">y</span>
+    <span class="linea"><span class="c1">P</span><span class="c2">L</span><span class="c3">O</span><span class="c4">F</span></span>
+  </h1>
+  <p class="lede">Dos muñecos de plastilina azul en un estudio blanco. <strong>Clic</strong> observa y piensa; <strong>Plof</strong> se lanza y se cae. Cada episodio va <strong>del plof al clic</strong>: de un error blando a una pieza que encaja.</p>
+  <dl class="datos">
+    <div class="dato"><dt>Temporada 0</dt><dd>25 <span>episodios</span></dd></div>
+    <div class="dato"><dt>Edad</dt><dd>2–6 <span>años</span></dd></div>
+    <div class="dato"><dt>Duración</dt><dd>61 <span>segundos</span></dd></div>
+    <div class="dato"><dt>Formato</dt><dd>9:16 <span>vertical</span></dd></div>
+    <div class="dato"><dt>Producidos</dt><dd>1 <span>de 25</span></dd></div>
+  </dl>
+</header>
+
+<section>
+  <p class="eyebrow">Los dos</p>
+  <h2>Dos fuerzas, no un listo y un torpe</h2>
+  <p class="sub">Son del mismo azul y se distinguen solo por la silueta. Ninguno de los dos es el profesor.</p>
+  <div class="duo">
+    <div class="pers">
+      <div class="silueta alto"><i class="cuerpo"></i><i class="cabeza"></i></div>
+      <h3>Clic</h3>
+      <p class="rol">Alto y delgado</p>
+      <p>Mira, compara y piensa antes de tocar. Llega tarde a la acción, pero es el que se da cuenta. Su nombre es el sonido de dos piezas encajando y el momento exacto en que se entiende algo.</p>
+    </div>
+    <div class="pers">
+      <div class="silueta bajo"><i class="cuerpo"></i><i class="cabeza"></i></div>
+      <h3>Plof</h3>
+      <p class="rol">Bajito y redondo</p>
+      <p>Se lanza, empuja y salta encima. Rueda hecho una bola cuando sale mal. Su nombre es el ruido blando de una caída, y la caída es la mitad de la gracia.</p>
+    </div>
+  </div>
+  <p class="tesis">La mecánica de la serie: <b>Plof se lanza y la lía. Al liarla, pasa algo que Clic ve. Esa es la pista.</b> Sin el desastre de uno no hay pista, y sin la mirada del otro no hay solución.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Anatomía</p>
+  <h2>Ocho beats, cincuenta y dos segundos</h2>
+  <p class="sub">Cada episodio recorre el mismo motor narrativo. La secuencia es fija, el orden es la historia; la duración de cada beat es la que ese beat necesita.</p>
+  <div class="beats">
+    <div class="beat"><span class="n">01</span><span class="nm">Anomalía</span><span class="s">5 s</span></div>
+    <div class="beat"><span class="n">02</span><span class="nm">Deseo</span><span class="s">5 s</span></div>
+    <div class="beat"><span class="n">03</span><span class="nm">Intento</span><span class="s">8 s</span></div>
+    <div class="beat"><span class="n">04</span><span class="nm">Fallo</span><span class="s">8 s</span></div>
+    <div class="beat"><span class="n">05</span><span class="nm">Mejora</span><span class="s">5 s</span></div>
+    <div class="beat pred"><span class="n">06</span><span class="nm">Predicción</span><span class="s">5 + 3 s</span></div>
+    <div class="beat"><span class="n">07</span><span class="nm">Solución</span><span class="s">8 s</span></div>
+    <div class="beat"><span class="n">08</span><span class="nm">Eco</span><span class="s">5 s</span></div>
+  </div>
+  <p class="nota">El beat 06 es el único distinto: la pregunta a cámara y <strong>tres segundos de silencio con la imagen congelada</strong> para que el niño conteste en voz alta antes que los personajes. El beat 08 siembra el episodio siguiente. Los tres beats de acción (intento, fallo y solución) duran 8 s; los de situación, 5 s. Detrás del último beat va siempre el mismo cierre de 3 s: Clic y Plof abrazados saludando a cámara, y un círculo que se cierra sobre ellos.</p>
+
+  <div class="montajes">
+    <div class="montaje">
+      <h4>Short</h4>
+      <span class="dur">61 s</span>
+      <p>Careta corta de 2-3 s, rótulo del episodio dicho por la narradora, los 52 s de historia y el cierre de 3 s. Sin cabecera larga delante: en un feed, ocho segundos de logo antes de la historia cuestan audiencia.</p>
+    </div>
+    <div class="montaje">
+      <h4>Recopilación</h4>
+      <span class="dur">8 s + n</span>
+      <p>La cabecera completa una sola vez al principio y detrás los episodios seguidos. El descubrimiento ocurre en el Short; la permanencia, en el recopilatorio.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">El mapa</p>
+  <h2>Cuatro motores × seis dominios</h2>
+  <p class="sub">La temporada no es una lista de ocurrencias: es una rejilla. Cada casilla cruza una forma de contar una historia con algo que el niño aprende, y ninguna se repite por accidente.</p>
+  <div class="scroller">
+    <table class="rejilla">
+      <thead>
+        <tr><th></th><th>Posición</th><th>Cantidad</th><th>Forma</th><th>Causa</th><th>Emoción</th><th>Cooperar</th></tr>
+      </thead>
+      <tbody>
+        <tr><th class="motor">Encontrar</th><td class="d1">03</td><td class="d2">07</td><td class="d3">11</td><td class="d4">15</td><td class="d5">19</td><td class="d6">23</td></tr>
+        <tr><th class="motor">Construir</th><td class="d1">04</td><td class="d2">08</td><td class="d3">12</td><td class="d4"><span class="hecho">01</span> · 02</td><td class="d5">20</td><td class="d6">24</td></tr>
+        <tr><th class="motor">Transportar</th><td class="d1">05</td><td class="d2">10</td><td class="d3">13</td><td class="d4">16</td><td class="d5">21</td><td class="d6">17</td></tr>
+        <tr><th class="motor">Compartir</th><td class="d1">06</td><td class="d2">09</td><td class="d3">14</td><td class="d4">18</td><td class="d5">22</td><td class="d6">25</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="nota">Las veinticuatro casillas están cubiertas. El episodio 02 repite a propósito la casilla del 01 con otro color, porque repetir un concepto con un caso nuevo es lo que lo fija: de ahí que la temporada tenga veinticinco episodios y no veinticuatro.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Los episodios</p>
+  <h2>Veinticinco retos</h2>
+  <p class="sub">En orden de producción, no de rejilla. La numeración sigue dos criterios: pagar la promesa que deja el final de cada episodio, y empezar por lo que es más sencillo de rodar.</p>
+
+  <div class="eps">
+
+    <article class="ep hecho">
+      <span class="num">01</span>
+      <div class="cab"><h3>Los colores</h3><span class="celda">Construir × Causa</span><span class="listo">Producido</span></div>
+      <div class="cuerpo"><span class="reto">Un anillo verde vacío en el suelo y solo dos fichas: una azul y otra amarilla.</span><span class="concepto">Azul + amarillo = verde</span></div>
+      <div class="lado"><span class="chip d4">Causa</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">02</span>
+      <div class="cab"><h3>El morado</h3><span class="celda">Construir × Causa</span></div>
+      <div class="cuerpo"><span class="reto">Vuelve el anillo, ahora con un hueco morado y fichas roja y azul.</span><span class="concepto">Rojo + azul = morado</span></div>
+      <div class="lado"><span class="chip d4">Causa</span><span class="quien"><i class="round"></i> Plof</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">03</span>
+      <div class="cab"><h3>El balón de arriba</h3><span class="celda">Encontrar × Posición</span></div>
+      <div class="cuerpo"><span class="reto">Jugando al balón, se queda encajado en lo alto de un árbol de plastilina.</span><span class="concepto">Para llegar más alto no hay que saltar más fuerte, hay que subirse a algo</span></div>
+      <div class="lado"><span class="chip d1">Posición</span><span class="quien"><i class="tall"></i> Clic</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">04</span>
+      <div class="cab"><h3>La torre que se cae</h3><span class="celda">Construir × Posición</span></div>
+      <div class="cuerpo"><span class="reto">Apilan piezas y la torre se derrumba una y otra vez.</span><span class="concepto">Lo grande debajo, lo pequeño encima</span></div>
+      <div class="lado"><span class="chip d1">Posición</span><span class="quien"><i class="tall"></i> Clic</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">05</span>
+      <div class="cab"><h3>El otro lado</h3><span class="celda">Transportar × Posición</span></div>
+      <div class="cuerpo"><span class="reto">Hay que pasar una pelota al otro lado de un muro que tiene un arco abierto abajo.</span><span class="concepto">Si no puedes por encima, busca el paso</span></div>
+      <div class="lado"><span class="chip d1">Posición</span><span class="quien"><i class="round"></i> Plof</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">06</span>
+      <div class="cab"><h3>Sitio para dos</h3><span class="celda">Compartir × Posición</span></div>
+      <div class="cuerpo"><span class="reto">Una alfombra pequeña y los dos quieren el centro.</span><span class="concepto">Hay sitio si cada uno ocupa su mitad</span></div>
+      <div class="lado"><span class="chip d1">Posición</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">07</span>
+      <div class="cab"><h3>Falta una</h3><span class="celda">Encontrar × Cantidad</span></div>
+      <div class="cuerpo"><span class="reto">Juegan con tres bolas y una rueda fuera de cuadro sin que se den cuenta.</span><span class="concepto">Contar hasta tres. «Falta» tiene forma de hueco</span></div>
+      <div class="lado"><span class="chip d2">Cantidad</span><span class="quien"><i class="tall"></i> Clic</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">08</span>
+      <div class="cab"><h3>La banqueta coja</h3><span class="celda">Construir × Cantidad</span></div>
+      <div class="cuerpo"><span class="reto">Montan una banqueta y siempre cojea.</span><span class="concepto">Cuatro patas. Una menos y se cae</span></div>
+      <div class="lado"><span class="chip d2">Cantidad</span><span class="quien"><i class="round"></i> Plof</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">09</span>
+      <div class="cab"><h3>Una para cada uno</h3><span class="celda">Compartir × Cantidad</span></div>
+      <div class="cuerpo"><span class="reto">Cinco galletas de plastilina para dos.</span><span class="concepto">Repartir igual: dos y dos, y la que sobra por la mitad</span></div>
+      <div class="lado"><span class="chip d2">Cantidad</span><span class="quien"><i class="tall"></i> Clic</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">10</span>
+      <div class="cab"><h3>Un solo viaje</h3><span class="celda">Transportar × Cantidad</span></div>
+      <div class="cuerpo"><span class="reto">Llevan bolas de una en una y no acaban nunca.</span><span class="concepto">Muchos en uno: si las juntas, vas una sola vez</span></div>
+      <div class="lado"><span class="chip d2">Cantidad</span><span class="quien"><i class="tall"></i> Clic</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">11</span>
+      <div class="cab"><h3>La que no encaja</h3><span class="celda">Encontrar × Forma</span></div>
+      <div class="cuerpo"><span class="reto">Entre muchas piezas iguales hay una distinta, escondida a la vista.</span><span class="concepto">Reconocer por la forma, no por el color</span></div>
+      <div class="lado"><span class="chip d3">Forma</span><span class="quien"><i class="tall"></i> Clic</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">12</span>
+      <div class="cab"><h3>El agujero cuadrado</h3><span class="celda">Construir × Forma</span></div>
+      <div class="cuerpo"><span class="reto">Un hueco cuadrado y solo piezas redondas.</span><span class="concepto">La plastilina cambia de forma: una bola se aplasta hasta ser un cuadrado</span></div>
+      <div class="lado"><span class="chip d3">Forma</span><span class="quien"><i class="round"></i> Plof</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">13</span>
+      <div class="cab"><h3>Lo que rueda</h3><span class="celda">Transportar × Forma</span></div>
+      <div class="cuerpo"><span class="reto">Un bloque cuadrado pesadísimo que no hay manera de mover.</span><span class="concepto">Lo redondo rueda, lo cuadrado no</span></div>
+      <div class="lado"><span class="chip d3">Forma</span><span class="quien"><i class="round"></i> Plof</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">14</span>
+      <div class="cab"><h3>La mitad justa</h3><span class="celda">Compartir × Forma</span></div>
+      <div class="cuerpo"><span class="reto">Una sola pieza grande, y la parten mal: un trozo mucho mayor que el otro.</span><span class="concepto">Igual y desigual. Comparar antes de repartir</span></div>
+      <div class="lado"><span class="chip d3">Forma</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">15</span>
+      <div class="cab"><h3>El rastro</h3><span class="celda">Encontrar × Causa</span></div>
+      <div class="cuerpo"><span class="reto">Una bola rueda fuera de cuadro y deja un surco marcado en el suelo blando.</span><span class="concepto">Las cosas dejan marcas, y las marcas dicen por dónde se fueron</span></div>
+      <div class="lado"><span class="chip d4">Causa</span><span class="quien"><i class="tall"></i> Clic</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">16</span>
+      <div class="cab"><h3>Cuesta abajo</h3><span class="celda">Transportar × Causa</span></div>
+      <div class="cuerpo"><span class="reto">Empujan algo pesado por el suelo y no avanza ni un palmo.</span><span class="concepto">En una rampa, si lo sueltas, baja solo</span></div>
+      <div class="lado"><span class="chip d4">Causa</span><span class="quien"><i class="round"></i> Plof</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">17</span>
+      <div class="cab"><h3>El palo largo</h3><span class="celda">Transportar × Cooperar</span></div>
+      <div class="cuerpo"><span class="reto">Una pieza larguísima que uno solo no puede llevar.</span><span class="concepto">Uno de cada punta, y hay que ir al mismo paso</span></div>
+      <div class="lado"><span class="chip d6">Cooperar</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">18</span>
+      <div class="cab"><h3>No aprietes</h3><span class="celda">Compartir × Causa</span></div>
+      <div class="cuerpo"><span class="reto">Comparten algo blando y Plof lo aprieta hasta dejarlo hecho un churro.</span><span class="concepto">Cómo tratas algo cambia lo que le pasa</span></div>
+      <div class="lado"><span class="chip d4">Causa</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">19</span>
+      <div class="cab"><h3>Plof se esconde</h3><span class="celda">Encontrar × Emoción</span></div>
+      <div class="cuerpo"><span class="reto">Plof la lía, le da vergüenza y desaparece de cuadro.</span><span class="concepto">Cuando alguien se esconde no siempre juega: a veces está triste</span></div>
+      <div class="lado"><span class="chip d5">Emoción</span><span class="quien"><i class="tall"></i> Clic</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">20</span>
+      <div class="cab"><h3>Lo que se rompió</h3><span class="celda">Construir × Emoción</span></div>
+      <div class="cuerpo"><span class="reto">Plof rompe sin querer lo que Clic estaba construyendo, y Clic se enfada de verdad.</span><span class="concepto">El enfado pasa, y lo roto se puede rehacer entre dos</span></div>
+      <div class="lado"><span class="chip d5">Emoción</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">21</span>
+      <div class="cab"><h3>Yo puedo solo</h3><span class="celda">Transportar × Emoción</span></div>
+      <div class="cuerpo"><span class="reto">Plof se empeña en cargar con todo, se agobia y se cae.</span><span class="concepto">Pedir ayuda no es perder</span></div>
+      <div class="lado"><span class="chip d5">Emoción</span><span class="quien"><i class="round"></i> Plof</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">22</span>
+      <div class="cab"><h3>Todavía no</h3><span class="celda">Compartir × Emoción</span></div>
+      <div class="cuerpo"><span class="reto">Clic no quiere prestar su pieza favorita: no se fía de las manos de Plof.</span><span class="concepto">Esperar sin arrebatar. El otro acaba dándotela</span></div>
+      <div class="lado"><span class="chip d5">Emoción</span><span class="quien"><i class="round"></i> Plof</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">23</span>
+      <div class="cab"><h3>Cuatro ojos</h3><span class="celda">Encontrar × Cooperar</span></div>
+      <div class="cuerpo"><span class="reto">Se pierde algo diminuto y por separado no hay manera de dar con ello.</span><span class="concepto">Repartirse el terreno: tú ese lado, yo este</span></div>
+      <div class="lado"><span class="chip d6">Cooperar</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">24</span>
+      <div class="cab"><h3>Hacen falta dos</h3><span class="celda">Construir × Cooperar</span></div>
+      <div class="cuerpo"><span class="reto">Un arco que se cae en cuanto uno de los dos suelta.</span><span class="concepto">Hay cosas que no se pueden hacer solo, por mucho que insistas</span></div>
+      <div class="lado"><span class="chip d6">Cooperar</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
+    </article>
+
+    <article class="ep">
+      <span class="num">25</span>
+      <div class="cab"><h3>Por turnos</h3><span class="celda">Compartir × Cooperar</span></div>
+      <div class="cuerpo"><span class="reto">Un solo balancín de plastilina y los dos encima a la vez: así no funciona.</span><span class="concepto">El turno. Cuentas hasta tres y cambias</span></div>
+      <div class="lado"><span class="chip d6">Cooperar</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
+    </article>
+
+  </div>
+
+  <div class="balance">
+    <div><b>8</b><span>los resuelve Clic</span></div>
+    <div><b>8</b><span>los resuelve Plof</span></div>
+    <div><b>9</b><span>los resuelven los dos</span></div>
+  </div>
+  <p class="nota">El reparto está medido a propósito. En los ocho de Plof la respuesta correcta es la fuerza o la osadía, y ahí el que se equivoca por pensar de más es Clic. En el dominio de la emoción, dos veces se descompone Plof y dos veces Clic.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Reglas de la casa</p>
+  <h2>Lo que no cambia nunca</h2>
+  <div class="reglas">
+    <div class="regla">
+      <h3>Todo es plastilina, y se comporta como tal</h3>
+      <p>Los cuerpos se aplastan al aterrizar y rebotan temblando. Se estiran al saltar y se comprimen en cada paso. Los objetos se abollan bajo las manos y guardan la huella un momento antes de redondearse otra vez.</p>
+      <p>La deformación siempre vuelve: la plastilina recupera su forma, su tamaño y su color exactos. Nunca se funde, nunca se parte, nunca se pierde un trozo.</p>
+    </div>
+    <div class="regla">
+      <h3>El mundo está vacío</h3>
+      <p>Estudio blanco sin horizonte, sin decorado y sin cielo. Si hace falta un árbol, es un árbol de plastilina. Nunca hay más de tres focos en pantalla, y los dos personajes cuentan como uno.</p>
+      <p>Ningún objeto puede ser azul: el azul es el color de los cuerpos y cualquier cosa azul se confundiría con ellos.</p>
+    </div>
+    <div class="regla">
+      <h3>El arranque siempre es el mismo</h3>
+      <p>Los dos entran jugando, saltando o persiguiéndose, y frenan en seco cuando aparece el reto. Es la firma de la serie: el niño de dos años reconoce el arranque y sabe que empieza.</p>
+    </div>
+    <div class="regla">
+      <h3>Tres edades a la vez</h3>
+      <p>A los dos y tres años, la comedia física se entiende sin una sola palabra. A los tres y cuatro, el problema es visual y se ve cómo se resuelve. A los cinco y seis, la pausa del beat 06 les deja adelantarse en voz alta.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Producción</p>
+  <h2>Por qué este orden</h2>
+  <ol class="orden">
+    <li><p><strong>El 02 va inmediatamente después del 01</strong> porque el primer episodio termina preguntando «¿y rojo con azul?». Una promesa así se paga en el episodio siguiente o se pierde.</p></li>
+    <li><p><strong>Del 03 al 18, lo sencillo de rodar:</strong> pocos objetos en pantalla y acciones simples. Es donde se hace el oficio.</p></li>
+    <li><p><strong>Los cuatro de emoción, al final.</strong> Son los mejores episodios de la temporada y también los más difíciles: hay que leer vergüenza, enfado o agobio en una cara de plastilina, sin diálogo. Conviene llegar a ellos con veinte episodios de rodaje encima.</p></li>
+  </ol>
+</section>
+
+<footer>
+  <p>Clic y Plof · Temporada 0 · Documento de trabajo, 16 de septiembre de 2026. Los títulos y las premisas son definitivos como mapa; cada episodio pasa su propia ficha y su control de calidad narrativo antes de rodarse.</p>
+</footer>
+
+</div>
+
+</body>
+</html>
