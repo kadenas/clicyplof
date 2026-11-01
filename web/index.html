@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Clic y Plof · Temporada 0</title>
-<meta name="description" content="Biblia de la temporada 0 de Clic y Plof: personajes, motor de ocho beats, rejilla de motores y dominios, y los veinticinco episodios.">
+<meta name="description" content="Biblia de la primera temporada de Clic y Plof: personajes, motor de ocho beats, rejilla de motores y dominios, y los trece episodios.">
 <!-- Favicon: el mismo emoji que tenía el informe en claude.ai, en SVG para no depender de ningún archivo -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -162,6 +162,11 @@
   td.d3{border-bottom:3px solid var(--for)} td.d4{border-bottom:3px solid var(--cau)}
   td.d5{border-bottom:3px solid var(--emo)} td.d6{border-bottom:3px solid var(--coo)}
   td .hecho{color:var(--cau);font-weight:600}
+  /* Casillas que se quedan para la temporada 2: atenuadas */
+  table.rejilla td.t2{opacity:.38;font-weight:400}
+  /* Lista compacta de la reserva */
+  .reserva{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;padding:0;list-style:none}
+  .reserva li{font-size:.86rem;color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;padding:4px 11px;background:var(--card)}
 
   /* ── Lista de episodios ───────────────────────────────────────────── */
   .eps{display:flex;flex-direction:column;gap:9px}
@@ -190,6 +195,8 @@
   }
   .chip.d1{background:var(--pos)} .chip.d2{background:var(--can)} .chip.d3{background:var(--for);color:#3A2C05}
   .chip.d4{background:var(--cau)} .chip.d5{background:var(--emo)} .chip.d6{background:var(--coo)}
+  /* El ep00 no tiene dominio del currículo: chip sin relleno, legible en los dos temas */
+  .chip.d0{background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
   :root[data-theme="dark"] .chip.d1,:root[data-theme="dark"] .chip.d2,:root[data-theme="dark"] .chip.d4,
   :root[data-theme="dark"] .chip.d5,:root[data-theme="dark"] .chip.d6{color:#16151A}
   @media (prefers-color-scheme:dark){
@@ -262,11 +269,11 @@
   </h1>
   <p class="lede">Dos muñecos de plastilina azul en un estudio blanco. <strong>Clic</strong> observa y piensa; <strong>Plof</strong> se lanza y se cae. Cada episodio va <strong>del plof al clic</strong>: de un error blando a una pieza que encaja.</p>
   <dl class="datos">
-    <div class="dato"><dt>Temporada 0</dt><dd>25 <span>episodios</span></dd></div>
+    <div class="dato"><dt>Temporada 1</dt><dd>13 <span>episodios</span></dd></div>
     <div class="dato"><dt>Edad</dt><dd>2–6 <span>años</span></dd></div>
     <div class="dato"><dt>Duración</dt><dd>61 <span>segundos</span></dd></div>
     <div class="dato"><dt>Formato</dt><dd>9:16 <span>vertical</span></dd></div>
-    <div class="dato"><dt>Producidos</dt><dd>1 <span>de 25</span></dd></div>
+    <div class="dato"><dt>Montados</dt><dd>3 <span>de 13</span></dd></div>
   </dl>
 </header>
 
@@ -331,40 +338,47 @@
         <tr><th></th><th>Posición</th><th>Cantidad</th><th>Forma</th><th>Causa</th><th>Emoción</th><th>Cooperar</th></tr>
       </thead>
       <tbody>
-        <tr><th class="motor">Encontrar</th><td class="d1">03</td><td class="d2">07</td><td class="d3">11</td><td class="d4">15</td><td class="d5">19</td><td class="d6">23</td></tr>
-        <tr><th class="motor">Construir</th><td class="d1">04</td><td class="d2">08</td><td class="d3">12</td><td class="d4"><span class="hecho">01</span> · 02</td><td class="d5">20</td><td class="d6">24</td></tr>
-        <tr><th class="motor">Transportar</th><td class="d1">05</td><td class="d2">10</td><td class="d3">13</td><td class="d4">16</td><td class="d5">21</td><td class="d6">17</td></tr>
-        <tr><th class="motor">Compartir</th><td class="d1">06</td><td class="d2">09</td><td class="d3">14</td><td class="d4">18</td><td class="d5">22</td><td class="d6">25</td></tr>
+        <tr><th class="motor">Encontrar</th><td class="d1">03</td><td class="d2">07</td><td class="d3">09</td><td class="d4 t2">T2</td><td class="d5 t2">T2</td><td class="d6 t2">T2</td></tr>
+        <tr><th class="motor">Construir</th><td class="d1">04</td><td class="d2">08</td><td class="d3">10</td><td class="d4"><span class="hecho">01 · 02</span></td><td class="d5 t2">T2</td><td class="d6 t2">T2</td></tr>
+        <tr><th class="motor">Transportar</th><td class="d1">05</td><td class="d2 t2">T2</td><td class="d3">11</td><td class="d4 t2">T2</td><td class="d5 t2">T2</td><td class="d6">12</td></tr>
+        <tr><th class="motor">Compartir</th><td class="d1">06</td><td class="d2 t2">T2</td><td class="d3 t2">T2</td><td class="d4 t2">T2</td><td class="d5 t2">T2</td><td class="d6 t2">T2</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="nota">Las veinticuatro casillas están cubiertas. El episodio 02 repite a propósito la casilla del 01 con otro color, porque repetir un concepto con un caso nuevo es lo que lo fija: de ahí que la temporada tenga veinticinco episodios y no veinticuatro.</p>
+  <p class="nota">La primera temporada cubre doce casillas de la rejilla, con el número con el que se publica cada episodio. Las marcadas «T2» se quedan para la segunda temporada, entre ellas toda la columna de emoción. El episodio 02 repite a propósito la casilla del 01 con otro color, porque repetir un concepto con un caso nuevo es lo que lo fija.</p>
 </section>
 
 <section>
   <p class="eyebrow">Los episodios</p>
-  <h2>Veinticinco retos</h2>
-  <p class="sub">En orden de producción, no de rejilla. La numeración sigue dos criterios: pagar la promesa que deja el final de cada episodio, y empezar por lo que es más sencillo de rodar.</p>
+  <h2>Trece retos</h2>
+  <p class="sub">En orden de publicación. El 00 presenta a los dos; desde el 01, cada episodio es un reto. La temporada se cierra con los dos llevando algo juntos.</p>
 
   <div class="eps">
 
+    <article class="ep">
+      <span class="num">00</span>
+      <div class="cab"><h3>¡Hola, Clic y Plof!</h3><span class="celda">Presentación</span></div>
+      <div class="cuerpo"><span class="reto">Una pelota roja y una portería de dos postes. Plof la lía dos veces; Clic tiene una idea.</span><span class="concepto">Conocer a los dos: del plof al clic</span></div>
+      <div class="lado"><span class="chip d0">Presentación</span><span class="quien"><i class="tall"></i> Clic</span></div>
+    </article>
+
     <article class="ep hecho">
       <span class="num">01</span>
-      <div class="cab"><h3>Los colores</h3><span class="celda">Construir × Causa</span><span class="listo">Producido</span></div>
+      <div class="cab"><h3>Los colores</h3><span class="celda">Construir × Causa</span><span class="listo">Montado</span></div>
       <div class="cuerpo"><span class="reto">Un anillo verde vacío en el suelo y solo dos fichas: una azul y otra amarilla.</span><span class="concepto">Azul + amarillo = verde</span></div>
       <div class="lado"><span class="chip d4">Causa</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
     </article>
 
-    <article class="ep">
+    <article class="ep hecho">
       <span class="num">02</span>
-      <div class="cab"><h3>El morado</h3><span class="celda">Construir × Causa</span></div>
+      <div class="cab"><h3>El morado</h3><span class="celda">Construir × Causa</span><span class="listo">Montado</span></div>
       <div class="cuerpo"><span class="reto">Vuelve el anillo, ahora con un hueco morado y fichas roja y azul.</span><span class="concepto">Rojo + azul = morado</span></div>
       <div class="lado"><span class="chip d4">Causa</span><span class="quien"><i class="round"></i> Plof</span></div>
     </article>
 
-    <article class="ep">
+    <article class="ep hecho">
       <span class="num">03</span>
-      <div class="cab"><h3>El balón de arriba</h3><span class="celda">Encontrar × Posición</span></div>
+      <div class="cab"><h3>El balón de arriba</h3><span class="celda">Encontrar × Posición</span><span class="listo">Montado</span></div>
       <div class="cuerpo"><span class="reto">Jugando al balón, se queda encajado en lo alto de un árbol de plastilina.</span><span class="concepto">Para llegar más alto no hay que saltar más fuerte, hay que subirse a algo</span></div>
       <div class="lado"><span class="chip d1">Posición</span><span class="quien"><i class="tall"></i> Clic</span></div>
     </article>
@@ -406,131 +420,58 @@
 
     <article class="ep">
       <span class="num">09</span>
-      <div class="cab"><h3>Una para cada uno</h3><span class="celda">Compartir × Cantidad</span></div>
-      <div class="cuerpo"><span class="reto">Cinco galletas de plastilina para dos.</span><span class="concepto">Repartir igual: dos y dos, y la que sobra por la mitad</span></div>
-      <div class="lado"><span class="chip d2">Cantidad</span><span class="quien"><i class="tall"></i> Clic</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">10</span>
-      <div class="cab"><h3>Un solo viaje</h3><span class="celda">Transportar × Cantidad</span></div>
-      <div class="cuerpo"><span class="reto">Llevan bolas de una en una y no acaban nunca.</span><span class="concepto">Muchos en uno: si las juntas, vas una sola vez</span></div>
-      <div class="lado"><span class="chip d2">Cantidad</span><span class="quien"><i class="tall"></i> Clic</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">11</span>
       <div class="cab"><h3>La que no encaja</h3><span class="celda">Encontrar × Forma</span></div>
       <div class="cuerpo"><span class="reto">Entre muchas piezas iguales hay una distinta, escondida a la vista.</span><span class="concepto">Reconocer por la forma, no por el color</span></div>
       <div class="lado"><span class="chip d3">Forma</span><span class="quien"><i class="tall"></i> Clic</span></div>
     </article>
 
     <article class="ep">
-      <span class="num">12</span>
+      <span class="num">10</span>
       <div class="cab"><h3>El agujero cuadrado</h3><span class="celda">Construir × Forma</span></div>
       <div class="cuerpo"><span class="reto">Un hueco cuadrado y solo piezas redondas.</span><span class="concepto">La plastilina cambia de forma: una bola se aplasta hasta ser un cuadrado</span></div>
       <div class="lado"><span class="chip d3">Forma</span><span class="quien"><i class="round"></i> Plof</span></div>
     </article>
 
     <article class="ep">
-      <span class="num">13</span>
+      <span class="num">11</span>
       <div class="cab"><h3>Lo que rueda</h3><span class="celda">Transportar × Forma</span></div>
-      <div class="cuerpo"><span class="reto">Un bloque cuadrado pesadísimo que no hay manera de mover.</span><span class="concepto">Lo redondo rueda, lo cuadrado no</span></div>
+      <div class="cuerpo"><span class="reto">Quieren meter gol, pero el «balón» es un cubo verde que no hay manera de mover.</span><span class="concepto">Lo redondo rueda, lo cuadrado no</span></div>
       <div class="lado"><span class="chip d3">Forma</span><span class="quien"><i class="round"></i> Plof</span></div>
     </article>
 
     <article class="ep">
-      <span class="num">14</span>
-      <div class="cab"><h3>La mitad justa</h3><span class="celda">Compartir × Forma</span></div>
-      <div class="cuerpo"><span class="reto">Una sola pieza grande, y la parten mal: un trozo mucho mayor que el otro.</span><span class="concepto">Igual y desigual. Comparar antes de repartir</span></div>
-      <div class="lado"><span class="chip d3">Forma</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">15</span>
-      <div class="cab"><h3>El rastro</h3><span class="celda">Encontrar × Causa</span></div>
-      <div class="cuerpo"><span class="reto">Una bola rueda fuera de cuadro y deja un surco marcado en el suelo blando.</span><span class="concepto">Las cosas dejan marcas, y las marcas dicen por dónde se fueron</span></div>
-      <div class="lado"><span class="chip d4">Causa</span><span class="quien"><i class="tall"></i> Clic</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">16</span>
-      <div class="cab"><h3>Cuesta abajo</h3><span class="celda">Transportar × Causa</span></div>
-      <div class="cuerpo"><span class="reto">Empujan algo pesado por el suelo y no avanza ni un palmo.</span><span class="concepto">En una rampa, si lo sueltas, baja solo</span></div>
-      <div class="lado"><span class="chip d4">Causa</span><span class="quien"><i class="round"></i> Plof</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">17</span>
+      <span class="num">12</span>
       <div class="cab"><h3>El palo largo</h3><span class="celda">Transportar × Cooperar</span></div>
-      <div class="cuerpo"><span class="reto">Una pieza larguísima que uno solo no puede llevar.</span><span class="concepto">Uno de cada punta, y hay que ir al mismo paso</span></div>
-      <div class="lado"><span class="chip d6">Cooperar</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">18</span>
-      <div class="cab"><h3>No aprietes</h3><span class="celda">Compartir × Causa</span></div>
-      <div class="cuerpo"><span class="reto">Comparten algo blando y Plof lo aprieta hasta dejarlo hecho un churro.</span><span class="concepto">Cómo tratas algo cambia lo que le pasa</span></div>
-      <div class="lado"><span class="chip d4">Causa</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">19</span>
-      <div class="cab"><h3>Plof se esconde</h3><span class="celda">Encontrar × Emoción</span></div>
-      <div class="cuerpo"><span class="reto">Plof la lía, le da vergüenza y desaparece de cuadro.</span><span class="concepto">Cuando alguien se esconde no siempre juega: a veces está triste</span></div>
-      <div class="lado"><span class="chip d5">Emoción</span><span class="quien"><i class="tall"></i> Clic</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">20</span>
-      <div class="cab"><h3>Lo que se rompió</h3><span class="celda">Construir × Emoción</span></div>
-      <div class="cuerpo"><span class="reto">Plof rompe sin querer lo que Clic estaba construyendo, y Clic se enfada de verdad.</span><span class="concepto">El enfado pasa, y lo roto se puede rehacer entre dos</span></div>
-      <div class="lado"><span class="chip d5">Emoción</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">21</span>
-      <div class="cab"><h3>Yo puedo solo</h3><span class="celda">Transportar × Emoción</span></div>
-      <div class="cuerpo"><span class="reto">Plof se empeña en cargar con todo, se agobia y se cae.</span><span class="concepto">Pedir ayuda no es perder</span></div>
-      <div class="lado"><span class="chip d5">Emoción</span><span class="quien"><i class="round"></i> Plof</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">22</span>
-      <div class="cab"><h3>Todavía no</h3><span class="celda">Compartir × Emoción</span></div>
-      <div class="cuerpo"><span class="reto">Clic no quiere prestar su pieza favorita: no se fía de las manos de Plof.</span><span class="concepto">Esperar sin arrebatar. El otro acaba dándotela</span></div>
-      <div class="lado"><span class="chip d5">Emoción</span><span class="quien"><i class="round"></i> Plof</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">23</span>
-      <div class="cab"><h3>Cuatro ojos</h3><span class="celda">Encontrar × Cooperar</span></div>
-      <div class="cuerpo"><span class="reto">Se pierde algo diminuto y por separado no hay manera de dar con ello.</span><span class="concepto">Repartirse el terreno: tú ese lado, yo este</span></div>
-      <div class="lado"><span class="chip d6">Cooperar</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">24</span>
-      <div class="cab"><h3>Hacen falta dos</h3><span class="celda">Construir × Cooperar</span></div>
-      <div class="cuerpo"><span class="reto">Un arco que se cae en cuanto uno de los dos suelta.</span><span class="concepto">Hay cosas que no se pueden hacer solo, por mucho que insistas</span></div>
-      <div class="lado"><span class="chip d6">Cooperar</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
-    </article>
-
-    <article class="ep">
-      <span class="num">25</span>
-      <div class="cab"><h3>Por turnos</h3><span class="celda">Compartir × Cooperar</span></div>
-      <div class="cuerpo"><span class="reto">Un solo balancín de plastilina y los dos encima a la vez: así no funciona.</span><span class="concepto">El turno. Cuentas hasta tres y cambias</span></div>
+      <div class="cuerpo"><span class="reto">Un palo largo y blando que uno solo no puede llevar, para terminar la portería. Final de temporada.</span><span class="concepto">Uno de cada punta, y hay que ir al mismo paso</span></div>
       <div class="lado"><span class="chip d6">Cooperar</span><span class="quien"><i class="tall"></i><i class="round"></i> Los dos</span></div>
     </article>
 
   </div>
 
   <div class="balance">
-    <div><b>8</b><span>los resuelve Clic</span></div>
-    <div><b>8</b><span>los resuelve Plof</span></div>
-    <div><b>9</b><span>los resuelven los dos</span></div>
+    <div><b>5</b><span>los resuelve Clic</span></div>
+    <div><b>5</b><span>los resuelve Plof</span></div>
+    <div><b>3</b><span>los resuelven los dos</span></div>
   </div>
-  <p class="nota">El reparto está medido a propósito. En los ocho de Plof la respuesta correcta es la fuerza o la osadía, y ahí el que se equivoca por pensar de más es Clic. En el dominio de la emoción, dos veces se descompone Plof y dos veces Clic.</p>
+  <p class="nota">El reparto está medido a propósito. En los cinco de Plof la respuesta correcta es la fuerza o la osadía, y ahí el que se equivoca por pensar de más es Clic.</p>
+
+  <h3 style="font-family:var(--f-display);font-weight:600;margin:30px 0 0">Reserva para la segunda temporada</h3>
+  <p class="nota">Trece premisas más del mapa original, ya pensadas y sin producir. Entre ellas, los cuatro episodios de emoción, que son los más difíciles de rodar.</p>
+  <ul class="reserva">
+    <li>Una para cada uno</li>
+    <li>Un solo viaje</li>
+    <li>La mitad justa</li>
+    <li>El rastro</li>
+    <li>Cuesta abajo</li>
+    <li>No aprietes</li>
+    <li>Plof se esconde</li>
+    <li>Lo que se rompió</li>
+    <li>Yo puedo solo</li>
+    <li>Todavía no</li>
+    <li>Cuatro ojos</li>
+    <li>Hacen falta dos</li>
+    <li>Por turnos</li>
+  </ul>
 </section>
 
 <section>
@@ -549,7 +490,7 @@
     </div>
     <div class="regla">
       <h3>El arranque siempre es el mismo</h3>
-      <p>Los dos entran jugando, saltando o persiguiéndose, y frenan en seco cuando aparece el reto. Es la firma de la serie: el niño de dos años reconoce el arranque y sabe que empieza.</p>
+      <p>Los dos empiezan en la postura del final de la cabecera, Clic apoyado en la cabeza de Plof. Se sueltan a jugar, saltar o perseguirse, y frenan en seco cuando aparece el reto. Es la firma de la serie: el niño de dos años reconoce el arranque y sabe que empieza.</p>
     </div>
     <div class="regla">
       <h3>Tres edades a la vez</h3>
@@ -562,14 +503,15 @@
   <p class="eyebrow">Producción</p>
   <h2>Por qué este orden</h2>
   <ol class="orden">
+    <li><p><strong>El 00 abre la temporada</strong> presentando a los dos: Plof se lanza y la lía, Clic piensa y tiene la idea. Desde ahí, el niño ya sabe qué esperar de cada uno.</p></li>
     <li><p><strong>El 02 va inmediatamente después del 01</strong> porque el primer episodio termina preguntando «¿y rojo con azul?». Una promesa así se paga en el episodio siguiente o se pierde.</p></li>
-    <li><p><strong>Del 03 al 18, lo sencillo de rodar:</strong> pocos objetos en pantalla y acciones simples. Es donde se hace el oficio.</p></li>
-    <li><p><strong>Los cuatro de emoción, al final.</strong> Son los mejores episodios de la temporada y también los más difíciles: hay que leer vergüenza, enfado o agobio en una cara de plastilina, sin diálogo. Conviene llegar a ellos con veinte episodios de rodaje encima.</p></li>
+    <li><p><strong>El 10 y el 11 son la misma idea dicha al revés:</strong> una bola que se aplasta hasta ser cuadrada para encajar, y un cubo que se redondea para rodar. La plastilina cambia de forma, y la forma decide lo que puede hacer.</p></li>
+    <li><p><strong>El 12 cierra la temporada</strong> con la portería del 00, ahora completa y hecha entre los dos. Los cuatro de emoción se quedan para la segunda temporada: hay que leer vergüenza, enfado o agobio en una cara de plastilina, sin diálogo, y conviene llegar a ellos con una temporada de rodaje encima.</p></li>
   </ol>
 </section>
 
 <footer>
-  <p>Clic y Plof · Temporada 0 · Documento de trabajo, 16 de septiembre de 2026. Los títulos y las premisas son definitivos como mapa; cada episodio pasa su propia ficha y su control de calidad narrativo antes de rodarse.</p>
+  <p>Clic y Plof · Temporada 1 · Documento de trabajo, actualizado el 1 de noviembre de 2026. Los títulos y las premisas son definitivos como mapa; cada episodio pasa su propia ficha y su control de calidad narrativo antes de rodarse.</p>
 </footer>
 
 </div>

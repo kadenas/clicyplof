@@ -2,6 +2,9 @@
 
 Serie **"Clic y Plof"**. Fecha: 16/09/2026.
 
+> **01/11/2026: la primera temporada se reduce a 13 episodios.** Ver la sección
+> "Primera temporada: 13 episodios". El mapa de 25 se conserva como reserva.
+
 Mapa construido sobre la sección 08 de `TATO_PLOF_VANGUARDIA_EDUCATIVA_PLAN.html`:
 **4 motores de historia × 6 dominios de aprendizaje = 24 premisas**. Una casilla, un episodio.
 
@@ -117,7 +120,51 @@ aplican las duraciones nuevas.
 
 ---
 
-## Los 25 episodios
+## Primera temporada: 13 episodios (replanteada el 01/11/2026)
+
+**Decisión:** la primera temporada baja de 25 a **13 episodios** (ep00 + 12). Motivos: unas
+**30 h de GPU** en vez de unas 58, y ver cómo responden los niños y el canal antes de comprometerse
+con 25. Se conserva todo lo ya hecho. Los episodios que salen **no se descartan**: pasan a la
+reserva de la temporada 2 (tabla de abajo).
+
+**Numeración:** la columna "Pub." es el orden en que se publican. La columna "Código" es el número
+de producción de siempre, el que llevan los archivos (`docs/epNN_…`, `prompts/epNN/`,
+`assets/epNN_…`). **Los archivos no se renombran**, para no romper rutas ni herramientas.
+
+| Pub. | Código | Título | Resuelve | Estado al 01/11/2026 |
+|---|---|---|---|---|
+| 00 | ep00 | **¡Hola, Clic y Plof!** | Clic | Ficha aprobada |
+| 01 | ep01 | **Los colores** | Los dos | Montado (hay que volver a montarlo con la marca nueva) |
+| 02 | ep02 | **El morado** | Plof | Montado |
+| 03 | ep03 | **El balón de arriba** | Clic | Montado |
+| 04 | ep04 | **La torre que se cae** | Clic | Tanda 1: prompts escritos, arranque listo |
+| 05 | ep05 | **El otro lado** | Plof | Tanda 1: prompts escritos, repetir arranque |
+| 06 | ep06 | **Sitio para dos** | Los dos | Tanda 1: prompts escritos, repetir arranque |
+| 07 | ep07 | **Falta una** | Clic | Tanda 1: prompts escritos, arranque listo |
+| 08 | ep08 | **La banqueta coja** | Plof | Tanda 2: ficha aprobada |
+| 09 | ep11 | **La que no encaja** | Clic | Tanda 2: ficha aprobada |
+| 10 | ep12 | **El agujero cuadrado** | Plof | Tanda 3: ficha aprobada |
+| 11 | ep13 | **Lo que rueda** | Plof | Tanda 3: ficha aprobada |
+| 12 | ep17 | **El palo largo** (final de temporada) | Los dos | Tanda 3: ficha aprobada |
+
+**Quién resuelve: Clic 5, Plof 5, los dos 3.** Se mantiene el equilibrio de la serie.
+
+**Dominios que cubre:** causa (01, 02), posición (03-06), cantidad (07, 08), forma (09-11) y
+cooperar (12). **El dominio de emoción se queda entero para la temporada 2**: es el más difícil de
+generar y conviene llegar a él con una temporada de oficio encima (ver "Orden de producción").
+
+**Por qué cierra "El palo largo":** los dos llevan juntos algo que ninguno puede llevar solo. Es
+un final de temporada que resume la serie ("sin los dos no sale") y con un solo objeto, así que
+es fácil de generar.
+
+**Reserva para la temporada 2** (no se producen ahora): ep09 *Una para cada uno* y ep10 *Un solo
+viaje*, con ficha ya aprobada; y ep14, ep15, ep16 y del ep18 al ep25. Antes de la temporada 2 hay
+que revisar las parejas que se pisan: ep09/ep14 (repartir), ep13/ep16 (mover algo pesado) y
+ep05/ep15 (la pelota que se va).
+
+---
+
+## Los 25 episodios (mapa original; la primera temporada es la selección de arriba)
 
 | # | Motor × Dominio | Título | El reto | Concepto que desbloquea | Resuelve |
 |---|---|---|---|---|---|
