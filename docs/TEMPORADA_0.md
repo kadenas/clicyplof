@@ -134,22 +134,27 @@ de producción de siempre, el que llevan los archivos (`docs/epNN_…`, `prompts
 | Pub. | Código | Título | Resuelve | Estado al 01/11/2026 |
 |---|---|---|---|---|
 | 00 | ep00 | **¡Hola, Clic y Plof!** | Clic | Ficha aprobada |
-| 01 | ep01 | **Los colores** | Los dos | Montado (hay que volver a montarlo con la marca nueva) |
-| 02 | ep02 | **El morado** | Plof | Montado |
-| 03 | ep03 | **El balón de arriba** | Clic | Montado |
-| 04 | ep04 | **La torre que se cae** | Clic | Tanda 1: prompts escritos, arranque listo |
-| 05 | ep05 | **El otro lado** | Plof | Tanda 1: prompts escritos, repetir arranque |
-| 06 | ep06 | **Sitio para dos** | Los dos | Tanda 1: prompts escritos, repetir arranque |
-| 07 | ep07 | **Falta una** | Clic | Tanda 1: prompts escritos, arranque listo |
-| 08 | ep08 | **La banqueta coja** | Plof | Tanda 2: ficha aprobada |
-| 09 | ep11 | **La que no encaja** | Clic | Tanda 2: ficha aprobada |
-| 10 | ep12 | **El agujero cuadrado** | Plof | Tanda 3: ficha aprobada |
-| 11 | ep13 | **Lo que rueda** | Plof | Tanda 3: ficha aprobada |
+| 01 | ep03 | **El balón de arriba** | Clic | Montado |
+| 02 | ep04 | **La torre que se cae** | Clic | Tanda 1: prompts escritos, arranque listo |
+| 03 | ep05 | **El otro lado** | Plof | Tanda 1: prompts escritos, repetir arranque |
+| 04 | ep06 | **Sitio para dos** | Los dos | Tanda 1: prompts escritos, repetir arranque |
+| 05 | ep07 | **Falta una** | Clic | Tanda 1: prompts escritos, arranque listo |
+| 06 | ep08 | **La banqueta coja** | Plof | Tanda 2: ficha aprobada |
+| 07 | ep11 | **La que no encaja** | Clic | Tanda 2: ficha aprobada |
+| 08 | ep12 | **El agujero cuadrado** | Plof | Tanda 3: ficha aprobada |
+| 09 | ep13 | **Lo que rueda** | Plof | Tanda 3: ficha aprobada |
+| 10 | ep01 | **Los colores** | Los dos | Montado; **hay que rehacerlo** (marca antigua, 8 × 8 s, personajes anteriores a la referencia) |
+| 11 | ep02 | **El morado** | Plof | Montado |
 | 12 | ep17 | **El palo largo** (final de temporada) | Los dos | Tanda 3: ficha aprobada |
+
+**Orden cambiado el 01/11/2026 (opción A):** *Los colores* y *El morado* pasan del principio al
+final de la temporada, justo antes del cierre. Van **siempre seguidos**: el 01 termina preguntando
+«¿y rojo con azul?» y el 02 lo responde. Motivos: dejar tiempo para rehacer bien el ep01, y
+aprovechar que el ep02 ya está hecho con los personajes buenos.
 
 **Quién resuelve: Clic 5, Plof 5, los dos 3.** Se mantiene el equilibrio de la serie.
 
-**Dominios que cubre:** causa (01, 02), posición (03-06), cantidad (07, 08), forma (09-11) y
+**Dominios que cubre:** posición (01-04), cantidad (05, 06), forma (07-09), causa (10, 11) y
 cooperar (12). **El dominio de emoción se queda entero para la temporada 2**: es el más difícil de
 generar y conviene llegar a él con una temporada de oficio encima (ver "Orden de producción").
 

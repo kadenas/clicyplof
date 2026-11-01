@@ -1,12 +1,12 @@
 # FICHA DE EPISODIO — EP12 "El agujero cuadrado"
 
-Fecha: 01/11/2026. Tanda 3 (ep12, ep13, ep17). **Se publica como nº 10** de la primera temporada
+Fecha: 01/11/2026. Tanda 3 (ep12, ep13, ep17). **Se publica como nº 08** de la primera temporada
 (ver `TEMPORADA_0.md` § "Primera temporada: 13 episodios"). Personajes fijados por imagen
 (`docs/PERSONAJES.md`, regla 8). **Ficha aprobada por el usuario el 01/11/2026.**
 
 ## Datos
 
-- **Episodio:** 12 (publicación: 10)
+- **Episodio:** 12 (publicación: 08)
 - **Título:** El agujero cuadrado
 - **Dominio del currículo:** forma (la plastilina cambia de forma: lo redondo se puede volver cuadrado)
 - **Motor de historia:** construir (tapar un agujero)

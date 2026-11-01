@@ -1,12 +1,12 @@
 # FICHA DE EPISODIO — EP13 "Lo que rueda"
 
-Fecha: 01/11/2026. Tanda 3 (ep12, ep13, ep17). **Se publica como nº 11** de la primera temporada
+Fecha: 01/11/2026. Tanda 3 (ep12, ep13, ep17). **Se publica como nº 09** de la primera temporada
 (ver `TEMPORADA_0.md` § "Primera temporada: 13 episodios"). Personajes fijados por imagen
 (`docs/PERSONAJES.md`, regla 8). **Ficha aprobada por el usuario el 01/11/2026.**
 
 ## Datos
 
-- **Episodio:** 13 (publicación: 11)
+- **Episodio:** 13 (publicación: 09)
 - **Título:** Lo que rueda
 - **Dominio del currículo:** forma (lo redondo rueda, lo cuadrado no)
 - **Motor de historia:** transportar (llevar el "balón" hasta la portería)
@@ -20,9 +20,9 @@ portería del ep00 (dos postes amarillos), pero en vez de la pelota roja hay un 
 Plof quiere marcar gol y el cubo no rueda. Así el deseo es claro para un niño de 2 años (meter
 gol, que ya vio en el ep00) y el episodio premia a quien vio el primero.
 
-**Por qué no se repite con el ep11 (publicación 09):** en el ep11 "rueda / no rueda" es la pista
+**Por qué no se repite con el ep11 (publicación 07):** en el ep11 "rueda / no rueda" es la pista
 para *reconocer* una forma. Aquí se *cambia* la forma para que ruede. Y hace pareja con el ep12
-(publicación 10), que va justo antes: allí redondo → cuadrado para encajar; aquí cuadrado →
+(publicación 08), que va justo antes: allí redondo → cuadrado para encajar; aquí cuadrado →
 redondo para rodar. Dos episodios seguidos con la misma idea dicha al revés: **la plastilina
 cambia de forma, y la forma decide qué puede hacer**.
 
